@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "react",
+    "oxc"
+  ],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true,
+        "allowExportNames": [
+          "useTransactions",
+          "useTheme",
+          "useToast",
+          "ACTIONS",
+          "transactionsReducer",
+          "DEFAULT_FILTERS",
+          "EMPTY_FORM",
+          "validateTransaction"
+        ]
+      }
+    ]
+  },
+  "ignorePatterns": [
+    "dist",
+    "node_modules",
+    "coverage"
+  ]
+}
