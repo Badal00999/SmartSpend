@@ -1,0 +1,94 @@
+/*
+ * Global stylesheet
+ * ------------------
+ * Tailwind v4 is imported here. Design tokens (colours, fonts) are declared in
+ * the @theme block so utilities such as `bg-brand-600` become available.
+ * Only a handful of custom classes live here – everything else is Tailwind.
+ */
+@import 'tailwindcss';
+
+/* Enable class-based dark mode ( <html class="dark"> ) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Brand palette – teal */
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-200: #99f6e4;
+  --color-brand-300: #5eead4;
+  --color-brand-400: #2dd4bf;
+  --color-brand-500: #14b8a6;
+  --color-brand-600: #0d9488;
+  --color-brand-700: #0f766e;
+  --color-brand-800: #115e59;
+  --color-brand-900: #134e4a;
+
+  --animate-fade-in: fade-in 0.35s ease-out both;
+  --animate-slide-up: slide-up 0.4s ease-out both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-100;
+  }
+
+  /* Accessibility: visible, consistent focus ring for keyboard users only */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900;
+  }
+
+  /* Respect users who prefer less motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Screen-reader-only "skip to content" link that becomes visible on focus */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-brand-700 focus:px-4 focus:py-2 focus:text-white focus:shadow-lg;
+  }
+
+  .card {
+    @apply rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100;
+  }
+
+  .label {
+    @apply mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300;
+  }
+}

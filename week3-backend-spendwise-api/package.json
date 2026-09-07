@@ -1,0 +1,51 @@
+{
+  "name": "spendwise-api",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "seed": "node scripts/seed.js",
+    "lint": "node --check src/server.js && echo lint-ok"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "rest-api",
+    "jwt",
+    "expense-tracker"
+  ],
+  "author": "Badal (Badal00999)",
+  "license": "MIT",
+  "description": "SpendWise REST API \u2013 Express + MongoDB back-end for the SmartSpend project",
+  "type": "module",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.5",
+    "morgan": "^1.12.0",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.9.0",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^11.2.0",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Badal00999/SmartSpend"
+  }
+}
