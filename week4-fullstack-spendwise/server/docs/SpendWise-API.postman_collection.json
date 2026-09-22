@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "SpendWise API",
+    "_postman_id": "9b1a5e4c-4f0e-4d5a-9b3e-spendwise-api",
+    "description": "REST API for the SpendWise / SmartSpend expense tracker.\n\n1. Run **Auth → Register** (or **Login** with demo@spendwise.app / Demo1234).\n2. The token is saved automatically to the `token` collection variable.\n3. Every other request uses `Bearer {{token}}`.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000/api/v1" },
+    { "key": "token", "value": "" },
+    { "key": "txId", "value": "" }
+  ],
+  "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+  "item": [
+    {
+      "name": "Meta",
+      "item": [
+        { "name": "Health", "request": { "auth": { "type": "noauth" }, "method": "GET", "url": "{{baseUrl}}/health" } },
+        { "name": "Categories & enums", "request": { "auth": { "type": "noauth" }, "method": "GET", "url": "{{baseUrl}}/meta/categories" } }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const j = pm.response.json();", "if (j.success) pm.collectionVariables.set('token', j.data.token);", "pm.test('201 Created', () => pm.response.to.have.status(201));"] } }],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/register",
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Badal\",\n  \"email\": \"badal@example.com\",\n  \"password\": \"Passw0rd123\",\n  \"currency\": \"INR\"\n}" }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const j = pm.response.json();", "if (j.success) pm.collectionVariables.set('token', j.data.token);", "pm.test('200 OK', () => pm.response.to.have.status(200));"] } }],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/auth/login",
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"demo@spendwise.app\",\n  \"password\": \"Demo1234\"\n}" }
+          }
+        },
+        { "name": "Me", "request": { "method": "GET", "url": "{{baseUrl}}/auth/me" } },
+        {
+          "name": "Update profile",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/auth/me", "body": { "mode": "raw", "raw": "{\n  \"name\": \"Badal Kumar\",\n  \"currency\": \"USD\"\n}" } }
+        },
+        {
+          "name": "Change password",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/auth/password", "body": { "mode": "raw", "raw": "{\n  \"currentPassword\": \"Passw0rd123\",\n  \"newPassword\": \"NewPassw0rd\"\n}" } }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Create",
+          "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["const j = pm.response.json();", "if (j.success) pm.collectionVariables.set('txId', j.data.id);", "pm.test('201 Created', () => pm.response.to.have.status(201));"] } }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/transactions",
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Grocery run\",\n  \"amount\": 2340,\n  \"type\": \"expense\",\n  \"category\": \"food\",\n  \"payment\": \"upi\",\n  \"date\": \"2026-09-03\",\n  \"notes\": \"Weekly vegetables\"\n}" }
+          }
+        },
+        {
+          "name": "List (filters)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/transactions?page=1&limit=10&type=expense&sort=-date",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "type", "value": "expense" },
+                { "key": "category", "value": "food", "disabled": true },
+                { "key": "q", "value": "grocery", "disabled": true },
+                { "key": "from", "value": "2026-08-01", "disabled": true },
+                { "key": "to", "value": "2026-09-30", "disabled": true },
+                { "key": "minAmount", "value": "100", "disabled": true },
+                { "key": "maxAmount", "value": "5000", "disabled": true },
+                { "key": "sort", "value": "-date" }
+              ]
+            }
+          }
+        },
+        { "name": "Get one", "request": { "method": "GET", "url": "{{baseUrl}}/transactions/{{txId}}" } },
+        {
+          "name": "Update",
+          "request": { "method": "PATCH", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/transactions/{{txId}}", "body": { "mode": "raw", "raw": "{\n  \"amount\": 2500,\n  \"notes\": \"Updated after receipt\"\n}" } }
+        },
+        { "name": "Delete", "request": { "method": "DELETE", "url": "{{baseUrl}}/transactions/{{txId}}" } },
+        {
+          "name": "Bulk create",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/transactions/bulk",
+            "body": { "mode": "raw", "raw": "[\n  { \"title\": \"Salary\", \"amount\": 85000, \"type\": \"income\", \"category\": \"salary\", \"payment\": \"bank\", \"date\": \"2026-09-01\" },\n  { \"title\": \"Uber\", \"amount\": 260, \"type\": \"expense\", \"category\": \"transport\", \"payment\": \"wallet\", \"date\": \"2026-09-02\" }\n]" }
+          }
+        },
+        {
+          "name": "Create – validation error example",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/transactions",
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"\",\n  \"amount\": -5,\n  \"type\": \"gift\",\n  \"category\": \"food\",\n  \"date\": \"2099-01-01\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stats",
+      "item": [
+        { "name": "Summary", "request": { "method": "GET", "url": "{{baseUrl}}/stats/summary" } },
+        { "name": "By category", "request": { "method": "GET", "url": "{{baseUrl}}/stats/by-category" } },
+        { "name": "Monthly (6)", "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/stats/monthly?months=6", "host": ["{{baseUrl}}"], "path": ["stats", "monthly"], "query": [{ "key": "months", "value": "6" }] } } }
+      ]
+    }
+  ]
+}
