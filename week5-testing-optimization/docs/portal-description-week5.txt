@@ -1,0 +1,11 @@
+Week 5 – Testing, Debugging and Optimization of SpendWise
+
+For Week 5, I extended the testing and debugging of the existing SpendWise React, Express and MongoDB application. I first reran the unchanged server and client suites, confirming 76 server tests and 78 client tests passed. I then added tests for missed boundary conditions rather than duplicating existing happy-path cases. The final application passes 100 server tests, 92 client tests and 30 Chromium end-to-end tests, including 40 new cases.
+
+One concrete defect was calendar validation. The API accepted 2025-02-29 even though 2025 was not a leap year, because JavaScript normalizes that date into March. I replaced the permissive check with exact calendar round-trip validation, added ordered date and amount range checks, and aligned the front-end validator. Regression tests now verify that invalid POST, PATCH and bulk requests return validation errors without inserting or changing records. A browser test confirms that the valid leap day 2024-02-29 remains usable and survives reload.
+
+A second issue was the request timeout ending when response headers arrived, leaving a stalled JSON body unprotected. I extended the timeout through body reading and added an abort-aware retry delay. Controlled tests verify timeout classification, cancellation, retry limits and response handling. Reviewing E2E logs also revealed SSE authentication tokens in access URLs. The application logger now omits query values and Referer while retaining request IDs, and the submitted logs are sanitized.
+
+For performance, I profiled the default transaction-list query using 20,000 deterministic records. Extending the compound index to include the ID sort tie-breaker removed a blocking sort and reduced examined documents from 10,000 to 20 for a 20-row page, while preserving the same ordered results. Raw samples and explain plans are included; these are local database-query measurements, not a claim of production or whole-application speed improvement.
+
+The deliverables include source code, test scripts, configuration, failing and passing test logs, coverage summaries, a debugging notebook, performance evidence and detailed setup instructions. The report documents specific root causes, code changes, verification results and remaining limitations instead of generic feature descriptions.

@@ -1,0 +1,101 @@
+
+> spendwise-api@1.0.0 test
+> vitest run tests/week5-logging.test.js
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/server
+
+ ❯ tests/week5-logging.test.js (4 tests | 4 failed) 314ms
+     × logs route/status without credentials or query values: /api/v1/events/stream?token=[REDACTED] 27ms
+     × logs route/status without credentials or query values: /api/v1/events/stream?ToKeN=[REDACTED]&token=[REDACTED] 5ms
+     × logs route/status without credentials or query values: /api/v1/events/stream?%74oken=private-test-value 4ms
+     × logs route/status without credentials or query values: /api/v1/events/stream?search=private-test-value 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/week5-logging.test.js > W5 log confidentiality > logs route/status without credentials or query values: /api/v1/events/stream?token=[REDACTED]
+AssertionError: expected '\u001b[0mGET /api/v1/events/stream?to…' not to contain 'private'
+
+- Expected
++ Received
+
+- private
++ GET /api/v1/events/stream?token=[REDACTED] 200 2.060 ms - 2
++
+
+ ❯ tests/week5-logging.test.js:19:21
+     17|     await request(app).get(url).set('Referer', 'https://example.test/?…
+     18|     const log = lines.join('')
+     19|     expect(log).not.toContain('private')
+       |                     ^
+     20|     expect(log).not.toContain('?')
+     21|     expect(log).toContain('GET /api/v1/events/stream 200')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/week5-logging.test.js > W5 log confidentiality > logs route/status without credentials or query values: /api/v1/events/stream?ToKeN=[REDACTED]&token=[REDACTED]
+AssertionError: expected '\u001b[0mGET /api/v1/events/stream?To…' not to contain 'private'
+
+- Expected
++ Received
+
+- private
++ GET /api/v1/events/stream?ToKeN=[REDACTED]&token=[REDACTED] 200 0.335 ms - 2
++
+
+ ❯ tests/week5-logging.test.js:19:21
+     17|     await request(app).get(url).set('Referer', 'https://example.test/?…
+     18|     const log = lines.join('')
+     19|     expect(log).not.toContain('private')
+       |                     ^
+     20|     expect(log).not.toContain('?')
+     21|     expect(log).toContain('GET /api/v1/events/stream 200')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/week5-logging.test.js > W5 log confidentiality > logs route/status without credentials or query values: /api/v1/events/stream?%74oken=private-test-value
+AssertionError: expected '\u001b[0mGET /api/v1/events/stream?%7…' not to contain 'private'
+
+- Expected
++ Received
+
+- private
++ GET /api/v1/events/stream?%74oken=private-test-value 200 0.193 ms - 2
++
+
+ ❯ tests/week5-logging.test.js:19:21
+     17|     await request(app).get(url).set('Referer', 'https://example.test/?…
+     18|     const log = lines.join('')
+     19|     expect(log).not.toContain('private')
+       |                     ^
+     20|     expect(log).not.toContain('?')
+     21|     expect(log).toContain('GET /api/v1/events/stream 200')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/week5-logging.test.js > W5 log confidentiality > logs route/status without credentials or query values: /api/v1/events/stream?search=private-test-value
+AssertionError: expected '\u001b[0mGET /api/v1/events/stream?se…' not to contain 'private'
+
+- Expected
++ Received
+
+- private
++ GET /api/v1/events/stream?search=private-test-value 200 0.206 ms - 2
++
+
+ ❯ tests/week5-logging.test.js:19:21
+     17|     await request(app).get(url).set('Referer', 'https://example.test/?…
+     18|     const log = lines.join('')
+     19|     expect(log).not.toContain('private')
+       |                     ^
+     20|     expect(log).not.toContain('?')
+     21|     expect(log).toContain('GET /api/v1/events/stream 200')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  17:18:35
+   Duration  834ms (transform 64ms, setup 260ms, import 105ms, tests 314ms, environment 0ms)
+

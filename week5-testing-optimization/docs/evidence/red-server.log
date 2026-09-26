@@ -1,0 +1,211 @@
+
+> spendwise-api@1.0.0 test
+> vitest run tests/week5-validation.test.js
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/server
+
+ ❯ tests/week5-validation.test.js (18 tests | 14 failed) 2429ms
+     × rejects impossible create date 2025-02-29 24ms
+     × rejects impossible create date 2024-02-30 6ms
+     × rejects impossible create date 2026-04-31 3ms
+     ✓ accepts a real leap day 2ms
+     × rejects invalid query calendar 2025-02-29 3ms
+     × rejects invalid query calendar 2026-13-01 3ms
+     × rejects invalid query calendar 2026-04-31 2ms
+     × rejects reversed date ranges in both query schemas 2ms
+     ✓ accepts equal endpoints and future query bounds (not future writes) 1ms
+     × rejects reversed amount ranges 2ms
+     ✓ keeps zero as an explicit amount filter 2ms
+     ✓ escapes search metacharacters rather than executing user regex 2ms
+     × POST rejects impossible date and does not create a normalised March record 405ms
+     × PATCH rejects impossible date without modifying original record 354ms
+     × bulk validation rejects entire invalid payload without a partial insert 338ms
+     × /transactions returns 422, not 500 or silent coercion, for invalid filter 347ms
+     × /stats/summary returns 422, not 500 or silent coercion, for invalid filter 343ms
+     × /stats/by-category returns 422, not 500 or silent coercion, for invalid filter 335ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/week5-validation.test.js > W5 calendar boundaries > rejects impossible create date 2025-02-29
+ FAIL  tests/week5-validation.test.js > W5 calendar boundaries > rejects impossible create date 2024-02-30
+ FAIL  tests/week5-validation.test.js > W5 calendar boundaries > rejects impossible create date 2026-04-31
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/week5-validation.test.js:9:78
+      7| describe('W5 calendar boundaries', () => {
+      8|   it.each(['2025-02-29', '2024-02-30', '2026-04-31'])('rejects impossi…
+      9|     expect(createTransactionSchema.safeParse({ ...sampleTx, date }).su…
+       |                                                                              ^
+     10|   })
+     11|   it('accepts a real leap day', () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/14]⎯
+
+ FAIL  tests/week5-validation.test.js > W5 calendar boundaries > rejects invalid query calendar 2025-02-29
+ FAIL  tests/week5-validation.test.js > W5 calendar boundaries > rejects invalid query calendar 2026-13-01
+ FAIL  tests/week5-validation.test.js > W5 calendar boundaries > rejects invalid query calendar 2026-04-31
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/week5-validation.test.js:15:69
+     13|   })
+     14|   it.each(['2025-02-29', '2026-13-01', '2026-04-31'])('rejects invalid…
+     15|     expect(listTransactionsQuerySchema.safeParse({ from }).success).to…
+       |                                                                     ^
+     16|     expect(summaryQuerySchema.safeParse({ from }).success).toBe(false)
+     17|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/14]⎯
+
+ FAIL  tests/week5-validation.test.js > W5 calendar boundaries > rejects reversed date ranges in both query schemas
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/week5-validation.test.js:20:66
+     18|   it('rejects reversed date ranges in both query schemas', () => {
+     19|     const query = { from: '2026-03-02', to: '2026-03-01' }
+     20|     expect(listTransactionsQuerySchema.safeParse(query).success).toBe(…
+       |                                                                  ^
+     21|     expect(summaryQuerySchema.safeParse(query).success).toBe(false)
+     22|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/14]⎯
+
+ FAIL  tests/week5-validation.test.js > W5 calendar boundaries > rejects reversed amount ranges
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/week5-validation.test.js:27:94
+     25|   })
+     26|   it('rejects reversed amount ranges', () => {
+     27|     expect(listTransactionsQuerySchema.safeParse({ minAmount: 100, max…
+       |                                                                                              ^
+     28|   })
+     29|   it('keeps zero as an explicit amount filter', () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/14]⎯
+
+ FAIL  tests/week5-validation.test.js > W5 HTTP validation and persistence > POST rejects impossible date and does not create a normalised March record
+AssertionError: expected 201 to be 422 // Object.is equality
+
+- Expected
++ Received
+
+- 422
++ 201
+
+ ❯ tests/week5-validation.test.js:43:27
+     41|     const { token } = await registerAndLogin()
+     42|     const result = await api().post('/api/v1/transactions').set(auth(t…
+     43|     expect(result.status).toBe(422)
+       |                           ^
+     44|     expect(result.body.error.details.some(d => d.field === 'date')).to…
+     45|     const list = await api().get('/api/v1/transactions').set(auth(toke…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/14]⎯
+
+ FAIL  tests/week5-validation.test.js > W5 HTTP validation and persistence > PATCH rejects impossible date without modifying original record
+AssertionError: expected 200 to be 422 // Object.is equality
+
+- Expected
++ Received
+
+- 422
++ 200
+
+ ❯ tests/week5-validation.test.js:52:91
+     50|     const created = await api().post('/api/v1/transactions').set(auth(…
+     51|     const url = `/api/v1/transactions/${created.body.data.id}`
+     52|     expect((await api().patch(url).set(auth(token)).send({ date: '2026…
+       |                                                                                           ^
+     53|     expect((await api().get(url).set(auth(token))).body.data.date).toB…
+     54|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/14]⎯
+
+ FAIL  tests/week5-validation.test.js > W5 HTTP validation and persistence > bulk validation rejects entire invalid payload without a partial insert
+AssertionError: expected 201 to be 422 // Object.is equality
+
+- Expected
++ Received
+
+- 422
++ 201
+
+ ❯ tests/week5-validation.test.js:58:27
+     56|     const { token } = await registerAndLogin()
+     57|     const result = await api().post('/api/v1/transactions/bulk').set(a…
+     58|     expect(result.status).toBe(422)
+       |                           ^
+     59|     expect((await api().get('/api/v1/transactions').set(auth(token))).…
+     60|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/14]⎯
+
+ FAIL  tests/week5-validation.test.js > W5 HTTP validation and persistence > /transactions returns 422, not 500 or silent coercion, for invalid filter
+ FAIL  tests/week5-validation.test.js > W5 HTTP validation and persistence > /stats/summary returns 422, not 500 or silent coercion, for invalid filter
+AssertionError: expected 400 to be 422 // Object.is equality
+
+- Expected
++ Received
+
+- 422
++ 400
+
+ ❯ tests/week5-validation.test.js:64:27
+     62|     const { token } = await registerAndLogin()
+     63|     const result = await api().get(`/api/v1${endpoint}?from=2026-13-01…
+     64|     expect(result.status).toBe(422)
+       |                           ^
+     65|   })
+     66| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/14]⎯
+
+ FAIL  tests/week5-validation.test.js > W5 HTTP validation and persistence > /stats/by-category returns 422, not 500 or silent coercion, for invalid filter
+AssertionError: expected 200 to be 422 // Object.is equality
+
+- Expected
++ Received
+
+- 422
++ 200
+
+ ❯ tests/week5-validation.test.js:64:27
+     62|     const { token } = await registerAndLogin()
+     63|     const result = await api().get(`/api/v1${endpoint}?from=2026-13-01…
+     64|     expect(result.status).toBe(422)
+       |                           ^
+     65|   })
+     66| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/14]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  14 failed | 4 passed (18)
+   Start at  17:12:16
+   Duration  3.35s (transform 194ms, setup 266ms, import 514ms, tests 2.43s, environment 0ms)
+

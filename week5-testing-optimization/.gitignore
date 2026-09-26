@@ -1,0 +1,31 @@
+# dependencies
+node_modules/
+
+# builds & caches
+dist/
+build/
+coverage/
+.vite/
+.cache/
+
+# environment files (never commit real secrets)
+.env
+.env.local
+.env.*.local
+
+# logs & editor noise
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# playwright artefacts
+e2e/test-results/
+e2e/playwright-report/
+e2e/.auth/
+
+# Week 5 sanitized test evidence is an intentional deliverable
+!docs/evidence/**/*.log
+!docs/evidence/*.log

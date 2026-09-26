@@ -1,0 +1,98 @@
+
+> spendwise-api@1.0.0 test
+> vitest run --coverage --reporter=default --reporter=json --outputFile.json=../docs/evidence/server-results.json
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/server
+      Coverage enabled with v8
+
+ ✓ tests/week5-logging.test.js (4 tests) 345ms
+ ✓ tests/transactions.test.js (24 tests) 10324ms
+     ✓ creates a transaction for the logged-in user  498ms
+     ✓ applies defaults for payment and notes  373ms
+     ✓ coerces a numeric string amount  390ms
+     ✓ returns 422 with per-field details for invalid input  356ms
+     ✓ rejects an invalid date format  351ms
+     ✓ lists only the current user's transactions, newest first, with pagination meta  720ms
+     ✓ paginates  391ms
+     ✓ filters by type, category, date range and amount  412ms
+     ✓ searches title and notes case-insensitively and escapes regex characters  369ms
+     ✓ sorts by amount ascending  364ms
+     ✓ rejects invalid query params  345ms
+     ✓ returns one transaction  353ms
+     ✓ returns 404 for another user's transaction (no data leak)  777ms
+     ✓ returns 422 for a malformed id  354ms
+     ✓ returns 404 for a well-formed but unknown id  354ms
+     ✓ updates only the provided fields  359ms
+     ✓ validates updated fields  355ms
+     ✓ rejects unknown fields and empty bodies  354ms
+     ✓ cannot update another user's transaction  699ms
+     ✓ deletes and returns 204, then 404 on re-fetch  382ms
+     ✓ cannot delete another user's transaction  686ms
+     ✓ creates many transactions at once  364ms
+     ✓ rejects an empty array and invalid items  416ms
+ ✓ tests/realtime.test.js (13 tests) 8498ms
+     ✓ reports zero live streams for a fresh user  387ms
+     ✓ opens an event-stream and announces itself  449ms
+     ✓ accepts the token as a Bearer [REDACTED] too (curl / Postman / test tools)  432ms
+     ✓ delivers transaction:created to the open stream  411ms
+     ✓ delivers update and delete events as well  428ms
+     ✓ never leaks one account’s events into another account’s stream  1022ms
+     ✓ replays missed events when the client reconnects with lastEventId  436ms
+     ✓ removes every transaction and broadcasts transaction:cleared  466ms
+     ✓ only clears the calling user’s data  756ms
+     ✓ echoes an X-Request-Id header and includes it in meta  370ms
+ ✓ tests/auth.test.js (15 tests) 6586ms
+     ✓ creates a user, hashes the password and returns a token  430ms
+     ✓ normalises the email to lower-case  344ms
+     ✓ rejects a duplicate email with 409  348ms
+     ✓ logs in with correct credentials  684ms
+     ✓ returns 401 for a wrong password (same message as unknown email)  695ms
+     ✓ returns the profile for a valid token  348ms
+     ✓ rejects a tampered token  345ms
+     ✓ updates the profile  349ms
+     ✓ rejects an empty profile update  348ms
+     ✓ changes the password and the old one stops working  1702ms
+     ✓ refuses to change the password when the current one is wrong  722ms
+ ✓ tests/stats.test.js (9 tests) 3825ms
+     ✓ returns totals, balance, count and this-month figures  542ms
+     ✓ returns zeros for a new user  361ms
+     ✓ respects a date range  388ms
+     ✓ is isolated per user  716ms
+     ✓ groups expenses by category with percentages, sorted descending  414ms
+     ✓ ignores income  377ms
+     ✓ returns one bucket per month including empty months  374ms
+     ✓ caps months at 24  350ms
+ ✓ tests/week5-validation.test.js (18 tests) 2630ms
+     ✓ POST rejects impossible date and does not create a normalised March record  467ms
+     ✓ PATCH rejects impossible date without modifying original record  375ms
+     ✓ bulk validation rejects entire invalid payload without a partial insert  366ms
+     ✓ /transactions returns 422, not 500 or silent coercion, for invalid filter  413ms
+     ✓ /stats/summary returns 422, not 500 or silent coercion, for invalid filter  351ms
+     ✓ /stats/by-category returns 422, not 500 or silent coercion, for invalid filter  343ms
+ ❯ tests/week5-query-plan.test.js (2 tests | 1 failed) 306ms
+     ✓ declares an index covering owner + date + deterministic ID tie-breaker 16ms
+     × uses no blocking SORT and preserves disjoint equal-date pages + API serialization 4ms
+ ✓ tests/app.test.js (8 tests) 383ms
+ ✓ tests/clientApp.test.js (7 tests) 356ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/week5-query-plan.test.js > W5 optimized default-list contract > uses no blocking SORT and preserves disjoint equal-date pages + API serialization
+MongoServerError: available disk space of 379338752 bytes is less than required minimum of 524288000
+ ❯ Connection.sendCommand node_modules/mongodb/src/cmap/connection.ts:561:16
+ ❯ Connection.command node_modules/mongodb/src/cmap/connection.ts:634:21
+ ❯ Server.command node_modules/mongodb/src/sdam/server.ts:351:20
+ ❯ executeOperationWithRetries node_modules/mongodb/src/operations/execute_operation.ts:266:23
+ ❯ executeOperation node_modules/mongodb/src/operations/execute_operation.ts:127:11
+ ❯ Collection.createIndex node_modules/mongodb/src/collection.ts:640:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 99 passed (100)
+   Start at  17:19:19
+   Duration  41.57s (transform 293ms, setup 2.09s, import 3.89s, tests 33.25s, environment 1ms)
+
+JSON report written to /home/user/week5-testing-optimization/docs/evidence/server-results.json

@@ -1,0 +1,124 @@
+
+> spendwise-api@1.0.0 test
+> vitest run --coverage --reporter=default --reporter=json --outputFile.json=../docs/evidence/server-results.json
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/server
+      Coverage enabled with v8
+
+ ✓ tests/week5-query-plan.test.js (2 tests) 757ms
+     ✓ uses no blocking SORT and preserves disjoint equal-date pages + API serialization  475ms
+ ✓ tests/transactions.test.js (24 tests) 10070ms
+     ✓ creates a transaction for the logged-in user  439ms
+     ✓ applies defaults for payment and notes  381ms
+     ✓ coerces a numeric string amount  348ms
+     ✓ returns 422 with per-field details for invalid input  351ms
+     ✓ rejects an invalid date format  347ms
+     ✓ lists only the current user's transactions, newest first, with pagination meta  720ms
+     ✓ paginates  399ms
+     ✓ filters by type, category, date range and amount  383ms
+     ✓ searches title and notes case-insensitively and escapes regex characters  385ms
+     ✓ sorts by amount ascending  367ms
+     ✓ rejects invalid query params  354ms
+     ✓ returns one transaction  361ms
+     ✓ returns 404 for another user's transaction (no data leak)  714ms
+     ✓ returns 422 for a malformed id  363ms
+     ✓ returns 404 for a well-formed but unknown id  354ms
+     ✓ updates only the provided fields  384ms
+     ✓ validates updated fields  349ms
+     ✓ rejects unknown fields and empty bodies  353ms
+     ✓ cannot update another user's transaction  685ms
+     ✓ deletes and returns 204, then 404 on re-fetch  361ms
+     ✓ cannot delete another user's transaction  689ms
+     ✓ creates many transactions at once  366ms
+     ✓ rejects an empty array and invalid items  357ms
+ ✓ tests/realtime.test.js (13 tests) 8400ms
+     ✓ reports zero live streams for a fresh user  418ms
+     ✓ opens an event-stream and announces itself  380ms
+     ✓ accepts the token as a Bearer [REDACTED] too (curl / Postman / test tools)  368ms
+     ✓ delivers transaction:created to the open stream  440ms
+     ✓ delivers update and delete events as well  443ms
+     ✓ never leaks one account’s events into another account’s stream  1004ms
+     ✓ replays missed events when the client reconnects with lastEventId  432ms
+     ✓ removes every transaction and broadcasts transaction:cleared  454ms
+     ✓ only clears the calling user’s data  747ms
+     ✓ echoes an X-Request-Id header and includes it in meta  364ms
+ ✓ tests/auth.test.js (15 tests) 7088ms
+     ✓ creates a user, hashes the password and returns a token  525ms
+     ✓ normalises the email to lower-case  372ms
+     ✓ rejects a duplicate email with 409  394ms
+     ✓ logs in with correct credentials  747ms
+     ✓ returns 401 for a wrong password (same message as unknown email)  715ms
+     ✓ returns the profile for a valid token  347ms
+     ✓ rejects a tampered token  345ms
+     ✓ updates the profile  391ms
+     ✓ rejects an empty profile update  388ms
+     ✓ changes the password and the old one stops working  1822ms
+     ✓ refuses to change the password when the current one is wrong  720ms
+ ✓ tests/stats.test.js (9 tests) 4018ms
+     ✓ returns totals, balance, count and this-month figures  510ms
+     ✓ returns zeros for a new user  386ms
+     ✓ respects a date range  438ms
+     ✓ is isolated per user  844ms
+     ✓ groups expenses by category with percentages, sorted descending  380ms
+     ✓ ignores income  395ms
+     ✓ returns one bucket per month including empty months  411ms
+     ✓ caps months at 24  353ms
+ ✓ tests/week5-validation.test.js (18 tests) 2586ms
+     ✓ POST rejects impossible date and does not create a normalised March record  434ms
+     ✓ PATCH rejects impossible date without modifying original record  378ms
+     ✓ bulk validation rejects entire invalid payload without a partial insert  359ms
+     ✓ /transactions returns 422, not 500 or silent coercion, for invalid filter  356ms
+     ✓ /stats/summary returns 422, not 500 or silent coercion, for invalid filter  369ms
+     ✓ /stats/by-category returns 422, not 500 or silent coercion, for invalid filter  373ms
+ ✓ tests/app.test.js (8 tests) 443ms
+ ✓ tests/clientApp.test.js (7 tests) 440ms
+ ✓ tests/week5-logging.test.js (4 tests) 425ms
+
+ Test Files  9 passed (9)
+      Tests  100 passed (100)
+   Start at  17:20:37
+   Duration  43.13s (transform 285ms, setup 2.28s, import 4.06s, tests 34.23s, environment 1ms)
+
+JSON report written to /home/user/week5-testing-optimization/docs/evidence/server-results.json
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   87.25 |    72.83 |   83.96 |   89.72 |                   
+ src               |   60.27 |    60.71 |   43.75 |   65.07 |                   
+  app.js           |   96.66 |    72.72 |     100 |     100 | 68-90             
+  clientApp.js     |   83.33 |    69.23 |     100 |     100 | 36-44             
+  server.js        |       0 |        0 |       0 |       0 | 12-47             
+ src/config        |   91.66 |    64.86 |     100 |   91.66 |                   
+  db.js            |     100 |       60 |     100 |     100 | 16-30             
+  env.js           |      80 |    65.62 |     100 |      80 | 17,20             
+ src/controllers   |   98.59 |       85 |     100 |     100 |                   
+  ...Controller.js |     100 |      100 |     100 |     100 |                   
+  ...Controller.js |     100 |    84.61 |     100 |     100 | 72-103            
+  ...Controller.js |   97.26 |    82.05 |     100 |     100 | ...0-31,36,88,128 
+ src/middleware    |   79.45 |     67.6 |   81.25 |      85 |                   
+  auth.js          |   81.48 |       70 |   66.66 |      88 | 66-68             
+  errorHandler.js  |   65.51 |    56.25 |      75 |   71.42 | 27-28,33-34,46,55 
+  requestId.js     |     100 |      100 |     100 |     100 |                   
+  requestLogger.js |     100 |    66.66 |     100 |     100 | 8                 
+  validate.js      |     100 |    88.88 |     100 |     100 | 11                
+ src/models        |     100 |       75 |     100 |     100 |                   
+  Transaction.js   |     100 |       50 |     100 |     100 | 48                
+  User.js          |     100 |      100 |     100 |     100 |                   
+ src/realtime      |    82.5 |       70 |   72.72 |   84.28 |                   
+  eventBus.js      |    82.5 |       70 |   72.72 |   84.28 | ...01,128,161-165 
+ src/routes        |     100 |    83.33 |     100 |     100 |                   
+  authRoutes.js    |     100 |      100 |     100 |     100 |                   
+  eventRoutes.js   |     100 |      100 |     100 |     100 |                   
+  metaRoutes.js    |     100 |       50 |     100 |     100 | 13                
+  statsRoutes.js   |     100 |      100 |     100 |     100 |                   
+  ...tionRoutes.js |     100 |      100 |     100 |     100 |                   
+ src/utils         |    93.1 |    76.19 |   88.23 |      96 |                   
+  ApiError.js      |     100 |     90.9 |     100 |     100 | 25                
+  asyncHandler.js  |     100 |      100 |     100 |     100 |                   
+  logger.js        |   71.42 |    33.33 |      50 |   83.33 | 12                
+  response.js      |     100 |      100 |     100 |     100 |                   
+ src/validators    |     100 |      100 |     100 |     100 |                   
+  schemas.js       |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------

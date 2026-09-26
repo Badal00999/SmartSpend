@@ -1,0 +1,7 @@
+/**
+ * Skeleton – animated placeholder used while remote data loads.
+ */
+
+export default function Skeleton({ className = '' }) {
+  return <div aria-hidden="true" className={`animate-pulse rounded-md bg-slate-200 dark:bg-slate-700 ${className}`} />
+}

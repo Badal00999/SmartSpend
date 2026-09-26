@@ -1,0 +1,20 @@
+
+> spendwise-api@1.0.0 test
+> vitest run tests/week5-validation.test.js
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/server
+
+ ✓ tests/week5-validation.test.js (18 tests) 2535ms
+     ✓ POST rejects impossible date and does not create a normalised March record  393ms
+     ✓ PATCH rejects impossible date without modifying original record  377ms
+     ✓ bulk validation rejects entire invalid payload without a partial insert  343ms
+     ✓ /transactions returns 422, not 500 or silent coercion, for invalid filter  372ms
+     ✓ /stats/summary returns 422, not 500 or silent coercion, for invalid filter  342ms
+     ✓ /stats/by-category returns 422, not 500 or silent coercion, for invalid filter  339ms
+
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+   Start at  17:12:40
+   Duration  3.47s (transform 176ms, setup 253ms, import 538ms, tests 2.53s, environment 0ms)
+

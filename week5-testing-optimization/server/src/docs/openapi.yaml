@@ -1,0 +1,491 @@
+openapi: 3.0.3
+info:
+  title: SpendWise API
+  version: 1.0.0
+  description: |
+    REST API for **SpendWise / SmartSpend** – a personal expense tracker.
+
+    * All responses use the envelope `{ success, data, meta? }` on success and
+      `{ success:false, error:{ code, message, details? } }` on failure.
+    * Authenticate with **`Authorization: Bearer <token>`** obtained from `/auth/register` or `/auth/login`.
+    * Dates are ISO strings `YYYY-MM-DD`. Amounts are numbers in the user's currency (default INR).
+    * Rate limits: 300 requests / 15 min per IP on `/api`, 20 / 15 min on register & login.
+  contact:
+    name: Badal
+    url: https://github.com/Badal00999/SmartSpend
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:4000/api/v1
+    description: Local development
+
+tags:
+  - name: Meta
+    description: Health check and reference data (public)
+  - name: Auth
+    description: Registration, login and profile
+  - name: Transactions
+    description: CRUD for income / expense records (requires auth)
+  - name: Stats
+    description: Aggregated figures for dashboards (requires auth)
+
+paths:
+  /health:
+    get:
+      tags: [Meta]
+      summary: Health check
+      responses:
+        '200':
+          description: Service is up
+          content:
+            application/json:
+              example:
+                success: true
+                data: { status: ok, uptime: 42, database: connected, timestamp: '2026-09-04T10:00:00.000Z' }
+
+  /meta/categories:
+    get:
+      tags: [Meta]
+      summary: List allowed types, categories and payment methods
+      responses:
+        '200':
+          description: Enum values for client dropdowns
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  types: [income, expense]
+                  categories: [food, transport, shopping, bills, entertainment, health, education, travel, salary, freelance, other]
+                  paymentMethods: [upi, card, cash, bank, wallet]
+
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Create an account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterInput' }
+            example: { name: Badal, email: badal@example.com, password: Passw0rd123, currency: INR }
+      responses:
+        '201':
+          description: Account created; returns the user and a JWT
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthResponse' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Log in and receive a JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginInput' }
+            example: { email: badal@example.com, password: Passw0rd123 }
+      responses:
+        '200':
+          description: Logged in
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AuthResponse' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /auth/me:
+    get:
+      tags: [Auth]
+      summary: Get the current user's profile
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  user: { id: 66d5f1a2b3c4d5e6f7a8b9c0, name: Badal, email: badal@example.com, currency: INR, role: user, createdAt: '2026-09-04T09:00:00.000Z', updatedAt: '2026-09-04T09:00:00.000Z' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    patch:
+      tags: [Auth]
+      summary: Update name or currency
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string, minLength: 2, maxLength: 60 }
+                currency: { type: string, minLength: 3, maxLength: 3, example: USD }
+      responses:
+        '200': { description: Updated user, content: { application/json: { schema: { $ref: '#/components/schemas/UserEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /auth/password:
+    patch:
+      tags: [Auth]
+      summary: Change password
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword: { type: string }
+                newPassword: { type: string, minLength: 8, description: Must contain a letter and a number }
+      responses:
+        '200':
+          description: Password changed; a fresh token is returned
+          content:
+            application/json:
+              example: { success: true, data: { message: Password updated, token: eyJhbGciOi... } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /transactions:
+    get:
+      tags: [Transactions]
+      summary: List transactions (filter, search, sort, paginate)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: page, in: query, schema: { type: integer, minimum: 1, default: 1 } }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+        - { name: type, in: query, schema: { $ref: '#/components/schemas/TransactionType' } }
+        - { name: category, in: query, schema: { $ref: '#/components/schemas/Category' } }
+        - { name: payment, in: query, schema: { $ref: '#/components/schemas/PaymentMethod' } }
+        - { name: from, in: query, description: Start date (inclusive), schema: { type: string, format: date, example: '2026-08-01' } }
+        - { name: to, in: query, description: End date (inclusive), schema: { type: string, format: date, example: '2026-08-31' } }
+        - { name: q, in: query, description: Case-insensitive search in title and notes, schema: { type: string, maxLength: 60 } }
+        - { name: minAmount, in: query, schema: { type: number, minimum: 0 } }
+        - { name: maxAmount, in: query, schema: { type: number, minimum: 0 } }
+        - name: sort
+          in: query
+          description: Prefix with `-` for descending
+          schema: { type: string, enum: [date, -date, amount, -amount, createdAt, -createdAt], default: -date }
+      responses:
+        '200':
+          description: Page of transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean, example: true }
+                  data: { type: array, items: { $ref: '#/components/schemas/Transaction' } }
+                  meta: { $ref: '#/components/schemas/PaginationMeta' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+    post:
+      tags: [Transactions]
+      summary: Create a transaction
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TransactionInput' }
+            example: { title: Grocery run, amount: 2340, type: expense, category: food, payment: upi, date: '2026-09-03', notes: Weekly vegetables }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TransactionEnvelope' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /transactions/bulk:
+    post:
+      tags: [Transactions]
+      summary: Create many transactions in one request (max 500)
+      description: Useful for importing the Week 2 front-end's localStorage data.
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              maxItems: 500
+              items: { $ref: '#/components/schemas/TransactionInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              example: { success: true, data: { count: 2, items: [] } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /transactions/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string, pattern: '^[a-f\d]{24}$' }, example: 66d5f1a2b3c4d5e6f7a8b9c0 }
+    get:
+      tags: [Transactions]
+      summary: Get one transaction
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200': { description: Transaction, content: { application/json: { schema: { $ref: '#/components/schemas/TransactionEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+    patch:
+      tags: [Transactions]
+      summary: Update one or more fields
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TransactionUpdateInput' }
+            example: { amount: 2500, notes: Updated after receipt }
+      responses:
+        '200': { description: Updated transaction, content: { application/json: { schema: { $ref: '#/components/schemas/TransactionEnvelope' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+    delete:
+      tags: [Transactions]
+      summary: Delete a transaction
+      security: [{ bearerAuth: [] }]
+      responses:
+        '204': { description: Deleted (no body) }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
+  /stats/summary:
+    get:
+      tags: [Stats]
+      summary: Totals, balance and this-month figures
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: from, in: query, schema: { type: string, format: date } }
+        - { name: to, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: Summary
+          content:
+            application/json:
+              example:
+                success: true
+                data: { income: 445000, expense: 49625, balance: 395375, transactionCount: 32, thisMonth: { income: 85000, expense: 3249 }, currency: INR }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /stats/by-category:
+    get:
+      tags: [Stats]
+      summary: Expense totals grouped by category
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: from, in: query, schema: { type: string, format: date } }
+        - { name: to, in: query, schema: { type: string, format: date } }
+      responses:
+        '200':
+          description: Sorted descending by total
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - { category: travel, total: 12000, count: 2, percent: 24.2 }
+                  - { category: food, total: 11630, count: 5, percent: 23.4 }
+                meta: { totalExpense: 49625 }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  /stats/monthly:
+    get:
+      tags: [Stats]
+      summary: Income vs expense per month
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - { name: months, in: query, description: How many months back (1–24), schema: { type: integer, default: 6 } }
+      responses:
+        '200':
+          description: Oldest → newest, empty months included
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - { month: '2026-04', income: 85000, expense: 5840 }
+                  - { month: '2026-05', income: 85000, expense: 11250 }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    TransactionType: { type: string, enum: [income, expense] }
+    Category:
+      type: string
+      enum: [food, transport, shopping, bills, entertainment, health, education, travel, salary, freelance, other]
+    PaymentMethod: { type: string, enum: [upi, card, cash, bank, wallet] }
+
+    RegisterInput:
+      type: object
+      required: [name, email, password]
+      properties:
+        name: { type: string, minLength: 2, maxLength: 60 }
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8, maxLength: 72, description: Must contain a letter and a number }
+        currency: { type: string, minLength: 3, maxLength: 3, default: INR }
+
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string }
+
+    User:
+      type: object
+      properties:
+        id: { type: string, example: 66d5f1a2b3c4d5e6f7a8b9c0 }
+        name: { type: string, example: Badal }
+        email: { type: string, example: badal@example.com }
+        currency: { type: string, example: INR }
+        role: { type: string, enum: [user, admin] }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    AuthResponse:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+        data:
+          type: object
+          properties:
+            user: { $ref: '#/components/schemas/User' }
+            token: { type: string, example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... }
+
+    UserEnvelope:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+        data:
+          type: object
+          properties:
+            user: { $ref: '#/components/schemas/User' }
+
+    TransactionInput:
+      type: object
+      required: [title, amount, type, category, date]
+      properties:
+        title: { type: string, minLength: 1, maxLength: 60, example: Grocery run }
+        amount: { type: number, exclusiveMinimum: 0, maximum: 10000000, example: 2340 }
+        type: { $ref: '#/components/schemas/TransactionType' }
+        category: { $ref: '#/components/schemas/Category' }
+        payment: { $ref: '#/components/schemas/PaymentMethod' }
+        date: { type: string, format: date, example: '2026-09-03', description: Cannot be in the future }
+        notes: { type: string, maxLength: 200 }
+
+    TransactionUpdateInput:
+      type: object
+      description: Any subset of TransactionInput (at least one field)
+      properties:
+        title: { type: string, minLength: 1, maxLength: 60 }
+        amount: { type: number, exclusiveMinimum: 0 }
+        type: { $ref: '#/components/schemas/TransactionType' }
+        category: { $ref: '#/components/schemas/Category' }
+        payment: { $ref: '#/components/schemas/PaymentMethod' }
+        date: { type: string, format: date }
+        notes: { type: string, maxLength: 200 }
+
+    Transaction:
+      allOf:
+        - $ref: '#/components/schemas/TransactionInput'
+        - type: object
+          properties:
+            id: { type: string, example: 66d5f1a2b3c4d5e6f7a8b9c1 }
+            user: { type: string, example: 66d5f1a2b3c4d5e6f7a8b9c0 }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+
+    TransactionEnvelope:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+        data: { $ref: '#/components/schemas/Transaction' }
+
+    PaginationMeta:
+      type: object
+      properties:
+        page: { type: integer, example: 1 }
+        limit: { type: integer, example: 20 }
+        total: { type: integer, example: 32 }
+        totalPages: { type: integer, example: 2 }
+        hasNext: { type: boolean, example: true }
+        hasPrev: { type: boolean, example: false }
+
+    Error:
+      type: object
+      properties:
+        success: { type: boolean, example: false }
+        error:
+          type: object
+          properties:
+            code: { type: string, example: VALIDATION_ERROR }
+            message: { type: string, example: Validation failed }
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field: { type: string, example: amount }
+                  message: { type: string, example: Amount must be greater than zero }
+
+  responses:
+    Unauthorized:
+      description: Missing, invalid or expired token
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { success: false, error: { code: UNAUTHORIZED, message: 'Missing or malformed Authorization header. Use: Bearer <token>' } }
+    NotFound:
+      description: Resource does not exist (or belongs to another user)
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { success: false, error: { code: NOT_FOUND, message: Transaction not found } }
+    Conflict:
+      description: Duplicate resource
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { success: false, error: { code: CONFLICT, message: An account with this email already exists } }
+    ValidationError:
+      description: Request failed validation
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example:
+            success: false
+            error:
+              code: VALIDATION_ERROR
+              message: Validation failed
+              details: [{ field: amount, message: Amount must be greater than zero }, { field: date, message: Date cannot be in the future }]
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+          example: { success: false, error: { code: TOO_MANY_REQUESTS, message: Too many attempts, try again in 15 minutes } }

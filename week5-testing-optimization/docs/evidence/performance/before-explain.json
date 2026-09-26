@@ -1,0 +1,250 @@
+{
+  "explainVersion": "1",
+  "queryPlanner": {
+    "namespace": "week5_benchmark.profile_transactions",
+    "parsedQuery": {
+      "user": {
+        "$eq": "000000000000000000000001"
+      }
+    },
+    "indexFilterSet": false,
+    "queryHash": "EA7EA8A2",
+    "planCacheShapeHash": "EA7EA8A2",
+    "planCacheKey": "81C33B23",
+    "optimizationTimeMillis": 38,
+    "maxIndexedOrSolutionsReached": false,
+    "maxIndexedAndSolutionsReached": false,
+    "maxScansToExplodeReached": false,
+    "prunedSimilarIndexes": false,
+    "winningPlan": {
+      "isCached": true,
+      "stage": "SORT",
+      "sortPattern": {
+        "date": -1,
+        "_id": -1
+      },
+      "memLimit": 104857600,
+      "limitAmount": 20,
+      "type": "simple",
+      "inputStage": {
+        "stage": "FETCH",
+        "inputStage": {
+          "stage": "IXSCAN",
+          "keyPattern": {
+            "user": 1
+          },
+          "indexName": "user_1",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "user": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "user": [
+              "[ObjectId('000000000000000000000001'), ObjectId('000000000000000000000001')]"
+            ]
+          }
+        }
+      }
+    },
+    "rejectedPlans": [
+      {
+        "isCached": false,
+        "stage": "SORT",
+        "sortPattern": {
+          "date": -1,
+          "_id": -1
+        },
+        "memLimit": 104857600,
+        "limitAmount": 20,
+        "type": "simple",
+        "inputStage": {
+          "stage": "FETCH",
+          "inputStage": {
+            "stage": "IXSCAN",
+            "keyPattern": {
+              "user": 1,
+              "category": 1
+            },
+            "indexName": "user_1_category_1",
+            "isMultiKey": false,
+            "multiKeyPaths": {
+              "user": [],
+              "category": []
+            },
+            "isUnique": false,
+            "isSparse": false,
+            "isPartial": false,
+            "indexVersion": 2,
+            "direction": "forward",
+            "indexBounds": {
+              "user": [
+                "[ObjectId('000000000000000000000001'), ObjectId('000000000000000000000001')]"
+              ],
+              "category": [
+                "[MinKey, MaxKey]"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "isCached": false,
+        "stage": "SORT",
+        "sortPattern": {
+          "date": -1,
+          "_id": -1
+        },
+        "memLimit": 104857600,
+        "limitAmount": 20,
+        "type": "simple",
+        "inputStage": {
+          "stage": "FETCH",
+          "inputStage": {
+            "stage": "IXSCAN",
+            "keyPattern": {
+              "user": 1,
+              "date": -1
+            },
+            "indexName": "user_1_date_-1",
+            "isMultiKey": false,
+            "multiKeyPaths": {
+              "user": [],
+              "date": []
+            },
+            "isUnique": false,
+            "isSparse": false,
+            "isPartial": false,
+            "indexVersion": 2,
+            "direction": "forward",
+            "indexBounds": {
+              "user": [
+                "[ObjectId('000000000000000000000001'), ObjectId('000000000000000000000001')]"
+              ],
+              "date": [
+                "[MaxKey, MinKey]"
+              ]
+            }
+          }
+        }
+      }
+    ]
+  },
+  "executionStats": {
+    "executionSuccess": true,
+    "nReturned": 20,
+    "executionTimeMillis": 39,
+    "totalKeysExamined": 10000,
+    "totalDocsExamined": 10000,
+    "executionStages": {
+      "isCached": true,
+      "stage": "SORT",
+      "nReturned": 20,
+      "executionTimeMillisEstimate": 10,
+      "works": 10022,
+      "advanced": 20,
+      "needTime": 10001,
+      "needYield": 0,
+      "saveState": 2,
+      "restoreState": 2,
+      "isEOF": 1,
+      "sortPattern": {
+        "date": -1,
+        "_id": -1
+      },
+      "memLimit": 104857600,
+      "limitAmount": 20,
+      "type": "simple",
+      "totalDataSizeSorted": 5200,
+      "usedDisk": false,
+      "spills": 0,
+      "spilledRecords": 0,
+      "spilledBytes": 0,
+      "spilledDataStorageSize": 0,
+      "inputStage": {
+        "stage": "FETCH",
+        "nReturned": 10000,
+        "executionTimeMillisEstimate": 10,
+        "works": 10001,
+        "advanced": 10000,
+        "needTime": 0,
+        "needYield": 0,
+        "saveState": 2,
+        "restoreState": 2,
+        "isEOF": 1,
+        "docsExamined": 10000,
+        "alreadyHasObj": 0,
+        "inputStage": {
+          "stage": "IXSCAN",
+          "nReturned": 10000,
+          "executionTimeMillisEstimate": 10,
+          "works": 10001,
+          "advanced": 10000,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 2,
+          "restoreState": 2,
+          "isEOF": 1,
+          "keyPattern": {
+            "user": 1
+          },
+          "indexName": "user_1",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "user": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "user": [
+              "[ObjectId('000000000000000000000001'), ObjectId('000000000000000000000001')]"
+            ]
+          },
+          "keysExamined": 10000,
+          "seeks": 1,
+          "dupsTested": 0,
+          "dupsDropped": 0
+        }
+      }
+    }
+  },
+  "queryShapeHash": "30024939FBD7539474AAD6B5B685A9D3432640E7AA38F03F9133B8119FC32532",
+  "command": {
+    "find": "profile_transactions",
+    "filter": {
+      "user": "000000000000000000000001"
+    },
+    "sort": {
+      "date": -1,
+      "_id": -1
+    },
+    "limit": 20,
+    "$db": "week5_benchmark"
+  },
+  "serverInfo": {
+    "host": "e2b.local",
+    "port": 39683,
+    "version": "8.2.6",
+    "gitVersion": "5d25c835745d06f712320b6cdae9d50b7b43663e"
+  },
+  "serverParameters": {
+    "internalQueryFacetBufferSizeBytes": 104857600,
+    "internalQueryFacetMaxOutputDocSizeBytes": 104857600,
+    "internalLookupStageIntermediateDocumentMaxSizeBytes": 104857600,
+    "internalDocumentSourceGroupMaxMemoryBytes": 104857600,
+    "internalQueryMaxBlockingSortMemoryUsageBytes": 104857600,
+    "internalQueryProhibitBlockingMergeOnMongoS": 0,
+    "internalQueryMaxAddToSetBytes": 104857600,
+    "internalDocumentSourceSetWindowFieldsMaxMemoryBytes": 104857600,
+    "internalQueryFrameworkControl": "trySbeRestricted",
+    "internalQueryPlannerIgnoreIndexWithCollationForRegex": 1
+  },
+  "ok": 1
+}
