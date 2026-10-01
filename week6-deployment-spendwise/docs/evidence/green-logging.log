@@ -1,0 +1,14 @@
+
+> spendwise-api@1.0.0 test
+> vitest run tests/week5-logging.test.js
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/server
+
+ ✓ tests/week5-logging.test.js (4 tests) 287ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  17:18:25
+   Duration  880ms (transform 64ms, setup 290ms, import 139ms, tests 287ms, environment 0ms)
+

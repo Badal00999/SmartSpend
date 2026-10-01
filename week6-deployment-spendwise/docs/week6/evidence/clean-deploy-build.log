@@ -1,0 +1,56 @@
+
+> spendwise-week6@1.0.0 deploy:build
+> npm --prefix client ci --include=dev && npm --prefix client run build && npm --prefix server ci --omit=dev
+
+
+added 193 packages, and audited 194 packages in 3s
+
+36 packages are looking for funding
+  run `npm fund` for details
+
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+
+> spendwise@1.0.0 build
+> vite build
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 644 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                  0.80 kB │ gzip:   0.46 kB
+dist/assets/index-oEl1Str2.css                  55.90 kB │ gzip:   9.68 kB
+dist/assets/Skeleton-BwvqrLMR.js                 0.21 kB │ gzip:   0.18 kB
+dist/assets/useDocumentTitle-D13umlfq.js         0.21 kB │ gzip:   0.18 kB
+dist/assets/useFetch-y90OPBDj.js                 0.71 kB │ gzip:   0.39 kB
+dist/assets/NotFoundPage-C8nFyu68.js             0.80 kB │ gzip:   0.43 kB
+dist/assets/stats-BRJoIVjo.js                    1.32 kB │ gzip:   0.68 kB
+dist/assets/Modal-CZlDDlKA.js                    1.59 kB │ gzip:   0.77 kB
+dist/assets/SyncBadge-DU7jFGpA.js                2.83 kB │ gzip:   1.12 kB
+dist/assets/ConverterPage-DeQNDQa9.js            6.58 kB │ gzip:   2.57 kB
+dist/assets/AuthPage-BEi4jVok.js                 7.20 kB │ gzip:   2.77 kB
+dist/assets/TransactionForm-D2Dkcw8D.js          7.34 kB │ gzip:   2.89 kB
+dist/assets/LandingPage-CKGLlA3F.js              8.25 kB │ gzip:   2.74 kB
+dist/assets/TransactionDetailPage-D0REwMr_.js    8.78 kB │ gzip:   2.82 kB
+dist/assets/SettingsPage-CkaGSgKx.js             9.47 kB │ gzip:   3.05 kB
+dist/assets/index-CEp_UbMl.js                  267.05 kB │ gzip:  86.38 kB
+dist/assets/DashboardPage-Ds_BR2jM.js          416.82 kB │ gzip: 119.19 kB
+
+✓ built in 568ms
+
+added 118 packages, and audited 119 packages in 1s
+
+36 packages are looking for funding
+  run `npm fund` for details
+
+2 moderate severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.

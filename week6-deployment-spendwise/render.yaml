@@ -1,0 +1,25 @@
+# Optional Blueprint. Manual Web Service instructions are in docs/week6/DEPLOYMENT.md.
+# If using Blueprint, select this file's repository path in the Render dashboard.
+services:
+  - type: web
+    name: spendwise-badal-week6
+    runtime: node
+    plan: free
+    branch: main
+    rootDir: week6-deployment-spendwise
+    buildCommand: npm run deploy:build
+    startCommand: npm run deploy:start
+    healthCheckPath: /api/v1/ready
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: SERVE_CLIENT
+        value: "true"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+# RENDER_EXTERNAL_URL supplies the HTTPS origin automatically.
+# Set CORS_ORIGIN explicitly if adding a custom domain (no trailing slash).

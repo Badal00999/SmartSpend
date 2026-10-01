@@ -1,0 +1,52 @@
+
+> spendwise-api@1.0.0 test
+> vitest run tests/week6-production.test.js
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/home/user/week6-deployment-spendwise/server[39m
+
+ [31m❯[39m tests/week6-production.test.js [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 339[2mms[22m[39m
+     [32m✓[39m accepts an explicit production config[32m 12[2mms[22m[39m
+     [32m✓[39m preserves no-config local development[32m 6[2mms[22m[39m
+     [32m✓[39m rejects absent or wrong-protocol database: [32m 4[2mms[22m[39m
+     [32m✓[39m rejects absent or wrong-protocol database: https://example.invalid[32m 3[2mms[22m[39m
+     [32m✓[39m rejects weak/example secret: short[32m 3[2mms[22m[39m
+     [32m✓[39m rejects weak/example secret: change-me-in-production-please-32-characters[32m 2[2mms[22m[39m
+     [32m✓[39m rejects insecure/ambiguous origins: undefined[32m 2[2mms[22m[39m
+     [32m✓[39m rejects insecure/ambiguous origins: "*"[32m 2[2mms[22m[39m
+     [32m✓[39m rejects insecure/ambiguous origins: "http://spendwise.example"[32m 2[2mms[22m[39m
+     [32m✓[39m rejects insecure/ambiguous origins: "https://spendwise.example/path"[32m 2[2mms[22m[39m
+     [32m✓[39m rejects insecure/ambiguous origins: "https://user:password@spendwise.example"[32m 2[2mms[22m[39m
+     [32m✓[39m accepts an explicit list of HTTPS origins[32m 3[2mms[22m[39m
+     [32m✓[39m real connected database answers 200 with no cache[32m 30[2mms[22m[39m
+     [32m✓[39m unavailable database answers 503[32m 8[2mms[22m[39m
+     [32m✓[39m probe failure answers 503 without leaking database details[32m 4[2mms[22m[39m
+[31m     [31m×[31m serves the shell even when the release root contains a hidden parent directory[39m[32m 16[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/week6-production.test.js[2m > [22mWeek 6 built-client release paths[2m > [22mserves the shell even when the release root contains a hidden parent directory
+[31m[1mAssertionError[22m: expected 404 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/week6-production.test.js:[2m57:31[22m[39m
+    [90m 55|[39m       [35mconst[39m app [33m=[39m [34mexpress[39m()[33m;[39m [34mmountClient[39m(app[33m,[39m dist)
+    [90m 56|[39m       [35mconst[39m response [33m=[39m [35mawait[39m [34mrequest[39m(app)[33m.[39m[35mget[39m([32m'/settings'[39m)
+    [90m 57|[39m       [34mexpect[39m(response[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)
+    [90m   |[39m                               [31m^[39m
+    [90m 58|[39m       [34mexpect[39m(response[33m.[39mtext)[33m.[39m[34mtoContain[39m([32m'id="root"'[39m)
+    [90m 59|[39m     } [35mfinally[39m { [35mawait[39m [34mrm[39m(temp[33m,[39m { recursive[33m:[39m [35mtrue[39m[33m,[39m force[33m:[39m [35mtrue[39m }) }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 17:38:13
+[2m   Duration [22m 1.44s[2m (transform 199ms, setup 370ms, import 597ms, tests 339ms, environment 0ms)[22m
+

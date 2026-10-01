@@ -1,0 +1,52 @@
+
+> spendwise@1.0.0 test
+> vitest run src/test/week5-api.test.js
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/client
+
+ ❯ src/test/week5-api.test.js (7 tests | 2 failed) 25ms
+     × keeps timeout active while response body is stalled after headers 13ms
+     × does not fetch again if caller cancels during retry backoff 3ms
+     ✓ never retries a default POST after network failure 2ms
+     ✓ bounds GET retries at three total attempts 1ms
+     ✓ returns null for 204 without attempting JSON parsing 1ms
+     ✓ rejects malformed successful response and cleans up timeout 1ms
+     ✓ dispatches session expiry only for authenticated 401 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/week5-api.test.js > W5 API transport boundaries > keeps timeout active while response body is stalled after headers
+AssertionError: expected 'pending' to be 'TIMEOUT' // Object.is equality
+
+Expected: "TIMEOUT"
+Received: "pending"
+
+ ❯ src/test/week5-api.test.js:21:21
+     19|     const pending = request('/health', { timeoutMs: 50, retries: 0 }).…
+     20|     await vi.advanceTimersByTimeAsync(60)
+     21|     expect(outcome).toBe('TIMEOUT')
+       |                     ^
+     22|     await pending
+     23|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/week5-api.test.js > W5 API transport boundaries > does not fetch again if caller cancels during retry backoff
+AssertionError: expected "vi.fn()" to be called 1 times, but got 2 times
+ ❯ src/test/week5-api.test.js:32:23
+     30|     controller.abort()
+     31|     await vi.advanceTimersByTimeAsync(1000)
+     32|     expect(fetchMock).toHaveBeenCalledTimes(1)
+       |                       ^
+     33|     expect((await pending).name).toBe('AbortError')
+     34|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+   Start at  17:12:20
+   Duration  1.15s (transform 83ms, setup 134ms, import 63ms, tests 25ms, environment 756ms)
+

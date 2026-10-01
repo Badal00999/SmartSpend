@@ -1,0 +1,44 @@
+# Optional template: copy to SmartSpend/.github/workflows/week5.yml.
+# Assumes this project is committed as week5-testing-optimization/.
+name: Week 5 checks
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'week5-testing-optimization/**'
+      - '.github/workflows/week5.yml'
+  pull_request:
+    paths:
+      - 'week5-testing-optimization/**'
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: week5-testing-optimization
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            week5-testing-optimization/server/package-lock.json
+            week5-testing-optimization/client/package-lock.json
+            week5-testing-optimization/e2e/package-lock.json
+      - run: npm run setup
+      - run: npm run test:coverage
+      - run: npm run lint
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+        working-directory: week5-testing-optimization/e2e
+      - run: npm run test:e2e
+      - run: npm run profile
+      - run: npm run evidence:sanitize
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: week5-sanitized-evidence
+          path: week5-testing-optimization/docs/evidence/

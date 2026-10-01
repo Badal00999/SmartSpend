@@ -1,0 +1,45 @@
+
+> spendwise@1.0.0 test
+> vitest run src/test/week5-form.test.jsx
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/client
+
+ ❯ src/test/week5-form.test.jsx (7 tests | 3 failed) 264ms
+     × rejects impossible/malformed date 2025-02-29 6ms
+     × rejects impossible/malformed date 2026-04-31 1ms
+     × rejects impossible/malformed date 2026-00-10 1ms
+     ✓ rejects impossible/malformed date not-a-date 0ms
+     ✓ accepts leap day with no validation errors 1ms
+     ✓ links the missing-date error to the input and prevents submit 210ms
+     ✓ trims title and sends numeric amount on valid submission 42ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/week5-form.test.jsx > W5 front-end calendar parity and form behaviour > rejects impossible/malformed date 2025-02-29
+ FAIL  src/test/week5-form.test.jsx > W5 front-end calendar parity and form behaviour > rejects impossible/malformed date 2026-04-31
+ FAIL  src/test/week5-form.test.jsx > W5 front-end calendar parity and form behaviour > rejects impossible/malformed date 2026-00-10
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ src/test/week5-form.test.jsx:8:58
+      6| describe('W5 front-end calendar parity and form behaviour', () => {
+      7|   it.each(['2025-02-29', '2026-04-31', '2026-00-10', 'not-a-date'])('r…
+      8|     expect(validateTransaction({ ...valid, date }).date).toBeTruthy()
+       |                                                          ^
+      9|   })
+     10|   it('accepts leap day with no validation errors', () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 4 passed (7)
+   Start at  17:13:07
+   Duration  1.61s (transform 126ms, setup 167ms, import 148ms, tests 264ms, environment 865ms)
+

@@ -1,0 +1,10 @@
+
+> spendwise-week6@1.0.0 lint
+> npm --prefix client run lint
+
+
+> spendwise@1.0.0 lint
+> oxlint
+
+Found 0 warnings and 0 errors.
+Finished in 145ms on 61 files with 104 rules using 2 threads.

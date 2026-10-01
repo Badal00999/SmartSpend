@@ -1,0 +1,44 @@
+
+> spendwise-week5@1.0.0 setup
+> node scripts/setup.mjs
+
+
+SpendWise full-stack setup – installing: server, client, e2e
+
+
+▶ server
+
+added 262 packages, and audited 263 packages in 4s
+
+70 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+▶ client
+
+added 193 packages, and audited 194 packages in 4s
+
+36 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+▶ e2e
+
+added 3 packages, and audited 4 packages in 516ms
+
+found 0 vulnerabilities
+
+✓ Dependencies installed.
+
+Next steps
+  1. npm run dev      → API on http://localhost:4000 and UI on http://localhost:5173
+  2. Open http://localhost:5173/login and press "Try the demo account"
+     (demo@spendwise.app / Demo1234 – seeded automatically)
+
+Optional
+  npm test            → API + client test suites
+  npm run test:e2e    → browser end-to-end tests (needs "npx playwright install chromium" once)
+  npm run build && npm start → production mode: the API serves the built UI on one port
+

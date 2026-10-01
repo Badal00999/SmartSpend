@@ -1,0 +1,9 @@
+
+> spendwise-week6@1.0.0 test:production:browser
+> node server/scripts/production-smoke.mjs --browser
+
+PASS: production SPA root/deep link, CSP and disabled Swagger
+PASS: authenticated transaction creation with production configuration
+PASS: Chromium built-client login/dashboard, production demo button hidden, no observed CSP errors
+PASS: data survives API process restart; edit and delete work
+PASS: graceful shutdown with active SSE. Scope: local API/DB; optional local TLS proxy uses an ephemeral self-signed certificate. Not Render/Atlas/public UAT.

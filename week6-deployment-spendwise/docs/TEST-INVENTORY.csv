@@ -1,0 +1,193 @@
+Layer,File,Test name,Result,Duration ms,Risk rationale
+server,app.test.js,Meta routes & cross-cutting behaviour GET / describes the API,passed,38.73320600000011,"HTTP status, health and middleware contracts."
+server,app.test.js,Meta routes & cross-cutting behaviour GET /api/v1/health reports database status,passed,14.427772000000004,"HTTP status, health and middleware contracts."
+server,app.test.js,Meta routes & cross-cutting behaviour GET /api/v1/meta/categories exposes enums,passed,8.13119299999994,"HTTP status, health and middleware contracts."
+server,app.test.js,Meta routes & cross-cutting behaviour serves the OpenAPI document and Swagger UI,passed,18.69847700000014,"HTTP status, health and middleware contracts."
+server,app.test.js,Meta routes & cross-cutting behaviour returns a JSON 404 for unknown routes,passed,9.707650000000058,"HTTP status, health and middleware contracts."
+server,app.test.js,Meta routes & cross-cutting behaviour returns 400 for malformed JSON,passed,20.08057699999995,"HTTP status, health and middleware contracts."
+server,app.test.js,Meta routes & cross-cutting behaviour sets security headers and hides X-Powered-By,passed,5.267793000000211,"HTTP status, health and middleware contracts."
+server,app.test.js,Meta routes & cross-cutting behaviour allows the configured CORS origin and blocks others,passed,6.210810000000038,"HTTP status, health and middleware contracts."
+server,auth.test.js,"POST /api/v1/auth/register creates a user, hashes the password and returns a token",passed,524.6678400000001,Authentication and profile/password security contracts.
+server,auth.test.js,POST /api/v1/auth/register normalises the email to lower-case,passed,372.49124900000015,Authentication and profile/password security contracts.
+server,auth.test.js,POST /api/v1/auth/register rejects a duplicate email with 409,passed,393.71009700000013,Authentication and profile/password security contracts.
+server,auth.test.js,POST /api/v1/auth/register returns field-level validation errors with 422,passed,9.419714000000113,Authentication and profile/password security contracts.
+server,auth.test.js,POST /api/v1/auth/register requires a number in the password,passed,4.906171000000086,Authentication and profile/password security contracts.
+server,auth.test.js,POST /api/v1/auth/login logs in with correct credentials,passed,747.3155939999997,Authentication and profile/password security contracts.
+server,auth.test.js,POST /api/v1/auth/login returns 401 for a wrong password (same message as unknown email),passed,714.9391210000003,Authentication and profile/password security contracts.
+server,auth.test.js,GET /api/v1/auth/me returns the profile for a valid token,passed,346.5485209999997,Authentication and profile/password security contracts.
+server,auth.test.js,GET /api/v1/auth/me rejects a missing token,passed,4.258367000000362,Authentication and profile/password security contracts.
+server,auth.test.js,GET /api/v1/auth/me rejects a tampered token,passed,344.88399299999946,Authentication and profile/password security contracts.
+server,auth.test.js,GET /api/v1/auth/me rejects a non-Bearer [REDACTED],passed,4.265245999999934,Authentication and profile/password security contracts.
+server,auth.test.js,PATCH /api/v1/auth/me and /password updates the profile,passed,391.33644899999945,Authentication and profile/password security contracts.
+server,auth.test.js,PATCH /api/v1/auth/me and /password rejects an empty profile update,passed,387.9262230000004,Authentication and profile/password security contracts.
+server,auth.test.js,PATCH /api/v1/auth/me and /password changes the password and the old one stops working,passed,1821.8274979999997,Authentication and profile/password security contracts.
+server,auth.test.js,PATCH /api/v1/auth/me and /password refuses to change the password when the current one is wrong,passed,720.0464110000003,Authentication and profile/password security contracts.
+server,clientApp.test.js,mountClient() serves index.html at the root,passed,63.08310600000004,"SPA fallback, static assets and API routing coexist correctly."
+server,clientApp.test.js,mountClient() serves hashed assets with long-lived caching,passed,7.37647099999981,"SPA fallback, static assets and API routing coexist correctly."
+server,clientApp.test.js,mountClient() falls back to index.html for client-side routes (SPA),passed,21.631627999999864,"SPA fallback, static assets and API routing coexist correctly."
+server,clientApp.test.js,mountClient() does not swallow missing files – they still 404,passed,12.774496,"SPA fallback, static assets and API routing coexist correctly."
+server,clientApp.test.js,mountClient() reports cleanly when there is no build on disk,passed,2.738223000000062,"SPA fallback, static assets and API routing coexist correctly."
+server,clientApp.test.js,client mount takes precedence over the JSON API root serves the app shell at / instead of the API info document,passed,15.625158000000056,"SPA fallback, static assets and API routing coexist correctly."
+server,clientApp.test.js,API process without a client build (test default) answers unknown non-API routes with a JSON 404 envelope,passed,9.165756999999985,"SPA fallback, static assets and API routing coexist correctly."
+server,realtime.test.js,GET /api/v1/events/status requires authentication,passed,44.65144099999998,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,GET /api/v1/events/status reports zero live streams for a fresh user,passed,417.971542,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,GET /api/v1/events/stream rejects a missing or invalid token,passed,35.84091599999988,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,GET /api/v1/events/stream opens an event-stream and announces itself,passed,380.03308800000013,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,GET /api/v1/events/stream accepts the token as a Bearer [REDACTED] too (curl / Postman / test tools),passed,368.4827849999999,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,realtime broadcasting delivers transaction:created to the open stream,passed,440.16794000000027,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,realtime broadcasting delivers update and delete events as well,passed,442.574474,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,realtime broadcasting never leaks one account’s events into another account’s stream,passed,1004.2551339999995,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,realtime broadcasting replays missed events when the client reconnects with lastEventId,passed,432.1444359999996,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,DELETE /api/v1/transactions (danger zone) removes every transaction and broadcasts transaction:cleared,passed,454.2270640000006,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,DELETE /api/v1/transactions (danger zone) only clears the calling user’s data,passed,747.3472030000003,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,request tracing echoes an X-Request-Id header and includes it in meta,passed,364.13851199999954,"SSE ownership, replay and delivery contracts."
+server,realtime.test.js,request tracing generates a request id when the caller does not send one,passed,4.50391000000036,"SSE ownership, replay and delivery contracts."
+server,stats.test.js,"GET /stats/summary returns totals, balance, count and this-month figures",passed,510.36101700000006,"Totals, category splits and date-based summary calculations."
+server,stats.test.js,GET /stats/summary returns zeros for a new user,passed,386.1247840000001,"Totals, category splits and date-based summary calculations."
+server,stats.test.js,GET /stats/summary respects a date range,passed,438.14012800000023,"Totals, category splits and date-based summary calculations."
+server,stats.test.js,GET /stats/summary is isolated per user,passed,843.9089669999998,"Totals, category splits and date-based summary calculations."
+server,stats.test.js,"GET /stats/by-category groups expenses by category with percentages, sorted descending",passed,379.87359600000036,"Totals, category splits and date-based summary calculations."
+server,stats.test.js,GET /stats/by-category ignores income,passed,394.6355489999996,"Totals, category splits and date-based summary calculations."
+server,stats.test.js,GET /stats/monthly returns one bucket per month including empty months,passed,410.9271829999998,"Totals, category splits and date-based summary calculations."
+server,stats.test.js,GET /stats/monthly caps months at 24,passed,352.612572,"Totals, category splits and date-based summary calculations."
+server,stats.test.js,GET /stats/monthly requires auth,passed,4.619694000000891,"Totals, category splits and date-based summary calculations."
+server,transactions.test.js,POST /transactions creates a transaction for the logged-in user,passed,438.881936,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,POST /transactions applies defaults for payment and notes,passed,380.77732000000015,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,POST /transactions coerces a numeric string amount,passed,347.91395999999986,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,POST /transactions returns 422 with per-field details for invalid input,passed,351.0950380000004,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,POST /transactions rejects an invalid date format,passed,346.995003,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,POST /transactions requires authentication,passed,5.351826000000074,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,"GET /transactions lists only the current user's transactions, newest first, with pagination meta",passed,720.1462150000002,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,GET /transactions paginates,passed,399.3964820000001,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,"GET /transactions filters by type, category, date range and amount",passed,383.3363199999999,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,GET /transactions searches title and notes case-insensitively and escapes regex characters,passed,384.68250499999976,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,GET /transactions sorts by amount ascending,passed,367.0181590000002,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,GET /transactions rejects invalid query params,passed,354.4023909999996,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,GET /transactions/:id returns one transaction,passed,360.63483599999927,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,GET /transactions/:id returns 404 for another user's transaction (no data leak),passed,714.306329,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,GET /transactions/:id returns 422 for a malformed id,passed,363.3515469999993,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,GET /transactions/:id returns 404 for a well-formed but unknown id,passed,354.3803660000003,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,PATCH /transactions/:id updates only the provided fields,passed,384.1309229999997,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,PATCH /transactions/:id validates updated fields,passed,348.60286799999994,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,PATCH /transactions/:id rejects unknown fields and empty bodies,passed,352.90325399999983,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,PATCH /transactions/:id cannot update another user's transaction,passed,685.1737630000007,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,"DELETE /transactions/:id deletes and returns 204, then 404 on re-fetch",passed,360.62352499999906,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,DELETE /transactions/:id cannot delete another user's transaction,passed,689.0598790000004,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,POST /transactions/bulk creates many transactions at once,passed,365.94580900000074,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,transactions.test.js,POST /transactions/bulk rejects an empty array and invalid items,passed,356.85955400000057,"CRUD persistence, ownership isolation and query/pagination contracts."
+server,week5-logging.test.js,W5 log confidentiality logs route/status without credentials or query values: /api/v1/events/stream?token=[REDACTED],passed,25.448482000000013,Log metadata remains useful while query credentials and Referer stay confidential.
+server,week5-logging.test.js,W5 log confidentiality logs route/status without credentials or query values: /api/v1/events/stream?ToKeN=[REDACTED]&token=[REDACTED],passed,4.004523000000063,Log metadata remains useful while query credentials and Referer stay confidential.
+server,week5-logging.test.js,W5 log confidentiality logs route/status without credentials or query values: /api/v1/events/stream?%74oken=private-test-value,passed,2.8312140000000454,Log metadata remains useful while query credentials and Referer stay confidential.
+server,week5-logging.test.js,W5 log confidentiality logs route/status without credentials or query values: /api/v1/events/stream?search=private-test-value,passed,2.8177369999999655,Log metadata remains useful while query credentials and Referer stay confidential.
+server,week5-query-plan.test.js,W5 optimized default-list contract declares an index covering owner + date + deterministic ID tie-breaker,passed,11.12531100000001,Index satisfies complete sort without changing serialized rows or deterministic pagination.
+server,week5-query-plan.test.js,W5 optimized default-list contract uses no blocking SORT and preserves disjoint equal-date pages + API serialization,passed,474.9760880000001,Index satisfies complete sort without changing serialized rows or deterministic pagination.
+server,week5-validation.test.js,W5 calendar boundaries rejects impossible create date 2025-02-29,passed,17.026906999999937,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries rejects impossible create date 2024-02-30,passed,7.179283999999825,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries rejects impossible create date 2026-04-31,passed,1.7239959999999428,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries accepts a real leap day,passed,1.6913690000001225,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries rejects invalid query calendar 2025-02-29,passed,3.791366999999809,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries rejects invalid query calendar 2026-13-01,passed,1.4858110000000124,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries rejects invalid query calendar 2026-04-31,passed,1.4354399999999714,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries rejects reversed date ranges in both query schemas,passed,1.8860489999999572,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries accepts equal endpoints and future query bounds (not future writes),passed,1.3966980000000149,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries rejects reversed amount ranges,passed,1.5871300000001156,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries keeps zero as an explicit amount filter,passed,2.436733000000004,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 calendar boundaries escapes search metacharacters rather than executing user regex,passed,1.9345780000001014,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 HTTP validation and persistence POST rejects impossible date and does not create a normalised March record,passed,434.42347500000005,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 HTTP validation and persistence PATCH rejects impossible date without modifying original record,passed,377.57180900000003,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,W5 HTTP validation and persistence bulk validation rejects entire invalid payload without a partial insert,passed,359.4017960000001,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,"W5 HTTP validation and persistence /transactions returns 422, not 500 or silent coercion, for invalid filter",passed,355.6094539999999,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,"W5 HTTP validation and persistence /stats/summary returns 422, not 500 or silent coercion, for invalid filter",passed,368.840138,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+server,week5-validation.test.js,"W5 HTTP validation and persistence /stats/by-category returns 422, not 500 or silent coercion, for invalid filter",passed,373.1909700000001,"Calendar and range boundaries; reject invalid values before persistence; preserve valid dates, literal search and zero bounds."
+client,App.test.jsx,App navigation renders the landing page and navigates to the dashboard,passed,1588.676319,Route rendering and user navigation.
+client,App.test.jsx,App navigation opens a transaction detail view from the dashboard list,passed,391.7009300000004,Route rendering and user navigation.
+client,App.test.jsx,App navigation shows the 404 page for unknown routes,passed,322.9351270000002,Route rendering and user navigation.
+client,App.test.jsx,App navigation renders converted amount from the exchange-rate API,passed,377.602613,Route rendering and user navigation.
+client,TransactionForm.test.jsx,validateTransaction flags missing title and amount,passed,3.79673200000002,Controlled form validation and user interactions.
+client,TransactionForm.test.jsx,validateTransaction rejects non-positive amounts,passed,0.6948580000000675,Controlled form validation and user interactions.
+client,TransactionForm.test.jsx,validateTransaction rejects future dates,passed,0.6517440000000079,Controlled form validation and user interactions.
+client,TransactionForm.test.jsx,validateTransaction passes a valid transaction,passed,1.73332100000016,Controlled form validation and user interactions.
+client,TransactionForm.test.jsx,<TransactionForm /> shows accessible error messages and does not submit when invalid,passed,328.02366099999995,Controlled form validation and user interactions.
+client,TransactionForm.test.jsx,<TransactionForm /> submits normalised values when valid,passed,234.31783599999994,Controlled form validation and user interactions.
+client,TransactionForm.test.jsx,<TransactionForm /> switches category list when type changes to income,passed,96.12657300000001,Controlled form validation and user interactions.
+client,TransactionForm.test.jsx,<TransactionForm /> keeps focus in the title input while typing (no remount bug),passed,118.42734399999995,Controlled form validation and user interactions.
+client,TransactionsContext.test.jsx,transactionsReducer adds to the front of the list,passed,4.4987579999999525,"State updates, persistence and mutation behaviour."
+client,TransactionsContext.test.jsx,transactionsReducer updates by id without mutating,passed,0.5528699999999844,"State updates, persistence and mutation behaviour."
+client,TransactionsContext.test.jsx,transactionsReducer deletes by id,passed,0.35074699999995573,"State updates, persistence and mutation behaviour."
+client,TransactionsContext.test.jsx,transactionsReducer ignores unknown actions,passed,0.1925420000000031,"State updates, persistence and mutation behaviour."
+client,TransactionsContext.test.jsx,"<TransactionsProvider /> adds, updates and deletes a transaction and persists to localStorage",passed,24.83412999999996,"State updates, persistence and mutation behaviour."
+client,TransactionsContext.test.jsx,<TransactionsProvider /> throws a helpful error when used outside the provider,passed,10.075990000000047,"State updates, persistence and mutation behaviour."
+client,api.test.jsx,api.request() unwraps the success envelope and sends the bearer [REDACTED],passed,4.627681000000166,Authentication/transport integration and error handling.
+client,api.test.jsx,api.request() turns the error envelope into an ApiError with field details,passed,1.0224170000001322,Authentication/transport integration and error handling.
+client,api.test.jsx,api.request() returns null for 204 responses,passed,0.38011500000015985,Authentication/transport integration and error handling.
+client,api.test.jsx,api.request() reports network failures in plain language,passed,1005.604971,Authentication/transport integration and error handling.
+client,api.test.jsx,validateAuth() enforces the API password policy on registration,passed,1.4075219999999717,Authentication/transport integration and error handling.
+client,api.test.jsx,<AuthProvider /> starts as guest without a token,passed,22.203699000000142,Authentication/transport integration and error handling.
+client,api.test.jsx,"<AuthProvider /> logs in, stores the token and logs out again",passed,5.329537000000073,Authentication/transport integration and error handling.
+client,api.test.jsx,<AuthProvider /> restores the session from a saved token via GET /auth/me,passed,55.10692499999959,Authentication/transport integration and error handling.
+client,api.test.jsx,<AuthProvider /> drops an expired token and falls back to guest mode,passed,54.173747000000276,Authentication/transport integration and error handling.
+client,api.test.jsx,<TransactionsProvider /> in API mode loads from the API after login and sends mutations to the server,passed,63.66947899999968,Authentication/transport integration and error handling.
+client,api.test.jsx,<TransactionsProvider /> in API mode surfaces API errors to the caller instead of mutating local state,passed,59.76023600000008,Authentication/transport integration and error handling.
+client,api.test.jsx,<AuthPage /> shows the API error message when credentials are wrong,passed,536.243696,Authentication/transport integration and error handling.
+client,api.test.jsx,<AuthPage /> signs in with the demo account and redirects to the dashboard,passed,57.78692899999987,Authentication/transport integration and error handling.
+client,format.test.js,formatCurrency formats INR with Indian digit grouping,passed,15.895872999999938,Presentation formatting and boundary values.
+client,format.test.js,formatCurrency formats other currencies,passed,0.49761599999987993,Presentation formatting and boundary values.
+client,format.test.js,formatCurrency treats invalid input as zero,passed,0.27014200000007804,Presentation formatting and boundary values.
+client,format.test.js,formatDate formats an ISO date in short style,passed,4.932029999999941,Presentation formatting and boundary values.
+client,format.test.js,formatDate returns an empty string for empty input,passed,0.22711000000003878,Presentation formatting and boundary values.
+client,format.test.js,"formatMonth turns YYYY-MM into ""Mon YYYY""",passed,0.5075059999999212,Presentation formatting and boundary values.
+client,format.test.js,todayISO returns YYYY-MM-DD,passed,0.29303200000003926,Presentation formatting and boundary values.
+client,stats.test.js,"computeTotals sums income, expenses and balance",passed,2.9364720000000943,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,computeTotals handles an empty list,passed,0.2913010000002032,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,expenseByCategory groups expenses and sorts by total descending,passed,0.4189810000000307,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,filterTransactions filters by type,passed,0.42299499999990076,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,filterTransactions filters by category,passed,8.620072000000164,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,filterTransactions searches title and notes case-insensitively,passed,0.3098680000000513,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,filterTransactions sorts by amount ascending,passed,0.244626000000153,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,filterTransactions defaults to newest first,passed,0.26489699999979166,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,percentOf returns a rounded percentage,passed,0.3149150000001555,"Totals, category splits and date-based summary calculations."
+client,stats.test.js,percentOf returns 0 when the total is 0,passed,0.20970099999999547,"Totals, category splits and date-based summary calculations."
+client,week4-integration.test.jsx,toApiQuery() keeps only meaningful values and always sends paging + sort,passed,3.2747759999999744,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,toApiQuery() maps the UI date range to the API range parameters,passed,0.5473649999998997,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,useDashboardStats() uses the aggregation endpoints once the user is signed in,passed,77.53413599999999,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,useDashboardStats() computes the same numbers locally for a guest,passed,3.1204230000000734,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,useServerTransactions() asks the API for one page with the filters in the query string,passed,56.92293300000006,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,useServerTransactions() pages the local list for guests without any network call,passed,10.272007999999914,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,realtime sync (SSE) applies a transaction created in another tab,passed,58.43643299999985,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,realtime sync (SSE) ignores the echo of this tab’s own mutation,passed,55.50757700000008,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,"realtime sync (SSE) handles updates, deletes and a full wipe from another device",passed,56.918740999999955,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,realtime sync (SSE) falls back to polling when EventSource is unavailable,passed,82.93569400000001,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,optimistic mutations shows the new row immediately and swaps in the server id afterwards,passed,55.965067999999974,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,optimistic mutations rolls back when the API rejects the create,passed,59.532048999999915,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-integration.test.jsx,optimistic mutations removes the row immediately on delete and restores it if the API fails,passed,56.910978000000114,"API query hooks, realtime invalidation and optimistic rollback."
+client,week4-ui.test.jsx,formatRelativeTime() describes freshness in human terms,passed,3.0312940000001163,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<SyncBadge /> labels each connection state,passed,39.868619999999964,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<SyncBadge /> shows the last sync time and calls onRefresh,passed,185.35296300000005,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<ConnectionBanner /> stays silent while everything works,passed,64.713211,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<ConnectionBanner /> explains an offline browser in plain language,passed,17.101057999999966,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<ConnectionBanner /> explains a stopped back-end in guest mode too,passed,6.08080300000006,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<Pagination /> summarises the visible range,passed,8.033705000000054,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<Pagination /> reports the page the user clicks,passed,47.38252199999988,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<Pagination /> disables the arrows at the edges and hides itself for a single page,passed,24.665510999999924,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<Pagination /> renders an empty state for an empty list,passed,1.8546830000000227,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,pageNumbers() keeps the list short with gaps,passed,0.8361130000000685,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<SettingsPage /> tells guests that settings need an account,passed,92.16752499999984,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<SettingsPage /> saves the profile through PATCH /auth/me when signed in,passed,275.04914099999996,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,<SettingsPage /> shows the live-connection diagnostics from /events/status,passed,78.07128499999999,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,session expiry signs the user out with a flag when the API returns 401 mid-session,passed,61.05419299999994,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,session expiry updates the cached user after a profile change,passed,61.33527400000003,"Integration UI states, settings and feedback."
+client,week4-ui.test.jsx,Settings danger zone asks for confirmation before wiping every transaction,passed,194.73974399999997,"Integration UI states, settings and feedback."
+client,week5-api.test.js,W5 API transport boundaries keeps timeout active while response body is stalled after headers,passed,7.988573999999971,"Bound request lifecycle, retries and cancellation; preserve response/error semantics."
+client,week5-api.test.js,W5 API transport boundaries does not fetch again if caller cancels during retry backoff,passed,1.7754150000000664,"Bound request lifecycle, retries and cancellation; preserve response/error semantics."
+client,week5-api.test.js,W5 API transport boundaries never retries a default POST after network failure,passed,2.637561000000005,"Bound request lifecycle, retries and cancellation; preserve response/error semantics."
+client,week5-api.test.js,W5 API transport boundaries bounds GET retries at three total attempts,passed,1.1282290000001467,"Bound request lifecycle, retries and cancellation; preserve response/error semantics."
+client,week5-api.test.js,W5 API transport boundaries returns null for 204 without attempting JSON parsing,passed,0.8674580000001697,"Bound request lifecycle, retries and cancellation; preserve response/error semantics."
+client,week5-api.test.js,W5 API transport boundaries rejects malformed successful response and cleans up timeout,passed,0.7337339999999131,"Bound request lifecycle, retries and cancellation; preserve response/error semantics."
+client,week5-api.test.js,W5 API transport boundaries dispatches session expiry only for authenticated 401,passed,1.4330589999999575,"Bound request lifecycle, retries and cancellation; preserve response/error semantics."
+client,week5-form.test.jsx,W5 front-end calendar parity and form behaviour rejects impossible/malformed date 2025-02-29,passed,3.0688970000001063,"Client calendar parity, accessible validation and correct submitted payload."
+client,week5-form.test.jsx,W5 front-end calendar parity and form behaviour rejects impossible/malformed date 2026-04-31,passed,8.15903400000002,"Client calendar parity, accessible validation and correct submitted payload."
+client,week5-form.test.jsx,W5 front-end calendar parity and form behaviour rejects impossible/malformed date 2026-00-10,passed,0.37467899999978727,"Client calendar parity, accessible validation and correct submitted payload."
+client,week5-form.test.jsx,W5 front-end calendar parity and form behaviour rejects impossible/malformed date not-a-date,passed,0.21439999999984138,"Client calendar parity, accessible validation and correct submitted payload."
+client,week5-form.test.jsx,W5 front-end calendar parity and form behaviour accepts leap day with no validation errors,passed,1.059818999999834,"Client calendar parity, accessible validation and correct submitted payload."
+client,week5-form.test.jsx,W5 front-end calendar parity and form behaviour links the missing-date error to the input and prevents submit,passed,232.64241300000003,"Client calendar parity, accessible validation and correct submitted payload."
+client,week5-form.test.jsx,W5 front-end calendar parity and form behaviour trims title and sends numeric amount on valid submission,passed,44.04961000000003,"Client calendar parity, accessible validation and correct submitted payload."

@@ -1,0 +1,90 @@
+
+> spendwise-week6@1.0.0 test
+> npm --prefix server test && npm --prefix client test -- --run
+
+
+> spendwise-api@1.0.0 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/home/user/week6-deployment-spendwise/server[39m
+
+ [32m✓[39m tests/transactions.test.js [2m([22m[2m24 tests[22m[2m)[22m[33m 8755[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a transaction for the logged-in user [33m 341[2mms[22m[39m
+     [33m[2m✓[22m[39m applies defaults for payment and notes [33m 331[2mms[22m[39m
+     [33m[2m✓[22m[39m coerces a numeric string amount [33m 324[2mms[22m[39m
+     [33m[2m✓[22m[39m returns 422 with per-field details for invalid input [33m 331[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects an invalid date format [33m 328[2mms[22m[39m
+     [33m[2m✓[22m[39m lists only the current user's transactions, newest first, with pagination meta [33m 678[2mms[22m[39m
+     [33m[2m✓[22m[39m paginates [33m 308[2mms[22m[39m
+     [33m[2m✓[22m[39m filters by type, category, date range and amount [33m 354[2mms[22m[39m
+     [33m[2m✓[22m[39m returns 404 for another user's transaction (no data leak) [33m 617[2mms[22m[39m
+     [33m[2m✓[22m[39m returns 404 for a well-formed but unknown id [33m 323[2mms[22m[39m
+     [33m[2m✓[22m[39m updates only the provided fields [33m 336[2mms[22m[39m
+     [33m[2m✓[22m[39m validates updated fields [33m 330[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects unknown fields and empty bodies [33m 327[2mms[22m[39m
+     [33m[2m✓[22m[39m cannot update another user's transaction [33m 651[2mms[22m[39m
+     [33m[2m✓[22m[39m deletes and returns 204, then 404 on re-fetch [33m 339[2mms[22m[39m
+     [33m[2m✓[22m[39m cannot delete another user's transaction [33m 613[2mms[22m[39m
+     [33m[2m✓[22m[39m creates many transactions at once [33m 320[2mms[22m[39m
+ [32m✓[39m tests/realtime.test.js [2m([22m[2m13 tests[22m[2m)[22m[33m 7827[2mms[22m[39m
+     [33m[2m✓[22m[39m reports zero live streams for a fresh user [33m 359[2mms[22m[39m
+     [33m[2m✓[22m[39m opens an event-stream and announces itself [33m 362[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts the token as a Bearer header too (curl / Postman / test tools) [33m 318[2mms[22m[39m
+     [33m[2m✓[22m[39m delivers transaction:created to the open stream [33m 337[2mms[22m[39m
+     [33m[2m✓[22m[39m delivers update and delete events as well [33m 412[2mms[22m[39m
+     [33m[2m✓[22m[39m never leaks one account’s events into another account’s stream [33m 880[2mms[22m[39m
+     [33m[2m✓[22m[39m replays missed events when the client reconnects with lastEventId [33m 412[2mms[22m[39m
+     [33m[2m✓[22m[39m removes every transaction and broadcasts transaction:cleared [33m 407[2mms[22m[39m
+     [33m[2m✓[22m[39m only clears the calling user’s data [33m 628[2mms[22m[39m
+     [33m[2m✓[22m[39m echoes an X-Request-Id header and includes it in meta [33m 327[2mms[22m[39m
+ [32m✓[39m tests/auth.test.js [2m([22m[2m15 tests[22m[2m)[22m[33m 5603[2mms[22m[39m
+     [33m[2m✓[22m[39m creates a user, hashes the password and returns a token [33m 383[2mms[22m[39m
+     [33m[2m✓[22m[39m normalises the email to lower-case [33m 322[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects a duplicate email with 409 [33m 314[2mms[22m[39m
+     [33m[2m✓[22m[39m logs in with correct credentials [33m 592[2mms[22m[39m
+     [33m[2m✓[22m[39m returns 401 for a wrong password (same message as unknown email) [33m 550[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects a tampered token [33m 314[2mms[22m[39m
+     [33m[2m✓[22m[39m updates the profile [33m 318[2mms[22m[39m
+     [33m[2m✓[22m[39m changes the password and the old one stops working [33m 1421[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses to change the password when the current one is wrong [33m 623[2mms[22m[39m
+ [32m✓[39m tests/stats.test.js [2m([22m[2m9 tests[22m[2m)[22m[33m 3111[2mms[22m[39m
+     [33m[2m✓[22m[39m returns totals, balance, count and this-month figures [33m 425[2mms[22m[39m
+     [33m[2m✓[22m[39m returns zeros for a new user [33m 327[2mms[22m[39m
+     [33m[2m✓[22m[39m respects a date range [33m 350[2mms[22m[39m
+     [33m[2m✓[22m[39m is isolated per user [33m 608[2mms[22m[39m
+     [33m[2m✓[22m[39m groups expenses by category with percentages, sorted descending [33m 347[2mms[22m[39m
+     [33m[2m✓[22m[39m ignores income [33m 308[2mms[22m[39m
+ [32m✓[39m tests/week5-validation.test.js [2m([22m[2m18 tests[22m[2m)[22m[33m 2191[2mms[22m[39m
+     [33m[2m✓[22m[39m POST rejects impossible date and does not create a normalised March record [33m 373[2mms[22m[39m
+     [33m[2m✓[22m[39m PATCH rejects impossible date without modifying original record [33m 326[2mms[22m[39m
+     [33m[2m✓[22m[39m bulk validation rejects entire invalid payload without a partial insert [33m 308[2mms[22m[39m
+     [33m[2m✓[22m[39m /transactions returns 422, not 500 or silent coercion, for invalid filter [33m 315[2mms[22m[39m
+     [33m[2m✓[22m[39m /stats/summary returns 422, not 500 or silent coercion, for invalid filter [33m 319[2mms[22m[39m
+ [31m❯[39m tests/week5-query-plan.test.js [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 248[2mms[22m[39m
+     [32m✓[39m declares an index covering owner + date + deterministic ID tie-breaker[32m 15[2mms[22m[39m
+[31m     [31m×[31m uses no blocking SORT and preserves disjoint equal-date pages + API serialization[39m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/app.test.js [2m([22m[2m8 tests[22m[2m)[22m[33m 336[2mms[22m[39m
+ [32m✓[39m tests/clientApp.test.js [2m([22m[2m7 tests[22m[2m)[22m[33m 313[2mms[22m[39m
+ [32m✓[39m tests/week6-production.test.js [2m([22m[2m16 tests[22m[2m)[22m[33m 310[2mms[22m[39m
+ [32m✓[39m tests/week5-logging.test.js [2m([22m[2m4 tests[22m[2m)[22m[32m 234[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/week5-query-plan.test.js[2m > [22mW5 optimized default-list contract[2m > [22muses no blocking SORT and preserves disjoint equal-date pages + API serialization
+[31m[1mMongoServerError[22m: available disk space of 503574528 bytes is less than required minimum of 524288000[39m
+[90m [2m❯[22m Connection.sendCommand node_modules/mongodb/src/cmap/connection.ts:[2m561:16[22m[39m
+[90m [2m❯[22m Connection.command node_modules/mongodb/src/cmap/connection.ts:[2m634:21[22m[39m
+[90m [2m❯[22m Server.command node_modules/mongodb/src/sdam/server.ts:[2m351:20[22m[39m
+[90m [2m❯[22m executeOperationWithRetries node_modules/mongodb/src/operations/execute_operation.ts:[2m266:23[22m[39m
+[90m [2m❯[22m executeOperation node_modules/mongodb/src/operations/execute_operation.ts:[2m127:11[22m[39m
+[90m [2m❯[22m Collection.createIndex node_modules/mongodb/src/collection.ts:[2m640:20[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m115 passed[39m[22m[90m (116)[39m
+[2m   Start at [22m 17:38:17
+[2m   Duration [22m 35.07s[2m (transform 261ms, setup 1.70s, import 3.20s, tests 28.93s, environment 1ms)[22m
+

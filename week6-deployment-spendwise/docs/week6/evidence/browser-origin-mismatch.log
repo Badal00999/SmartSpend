@@ -1,0 +1,26 @@
+
+> spendwise-week6@1.0.0 test:production:browser
+> node server/scripts/production-smoke.mjs --browser
+
+PASS: production SPA root/deep link, CSP and disabled Swagger
+PASS: authenticated transaction creation with production configuration
+BROWSER CONSOLE: Failed to load resource: the server responded with a status of 403 (Forbidden)
+BROWSER REQUEST FAILED: http://localhost:39873/assets/index-CEp_UbMl.js net::ERR_ABORTED
+BROWSER CONSOLE: Refused to apply style from 'http://localhost:39873/assets/index-oEl1Str2.css' because its MIME type ('application/json') is not a supported stylesheet MIME type, and strict MIME checking is enabled.
+BROWSER REQUEST FAILED: http://localhost:39873/assets/index-oEl1Str2.css net::ERR_ABORTED
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('heading', { name: 'Welcome back' }) to be visible
+
+    at /home/user/week6-deployment-spendwise/server/scripts/production-smoke.mjs:81:65 {
+  log: [
+    "  - waiting for getByRole('heading', { name: 'Welcome back' }) to be visible"
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v20.20.2

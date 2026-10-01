@@ -1,0 +1,32 @@
+
+> spendwise-week5@1.0.0 build
+> npm --prefix client run build
+
+
+> spendwise@1.0.0 build
+> vite build
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 644 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                  0.80 kB │ gzip:   0.46 kB
+dist/assets/index-oEl1Str2.css                  55.90 kB │ gzip:   9.68 kB
+dist/assets/Skeleton-CG0MJxz9.js                 0.21 kB │ gzip:   0.18 kB
+dist/assets/useDocumentTitle-DHTq9NeO.js         0.21 kB │ gzip:   0.18 kB
+dist/assets/useFetch-BLAx2Ote.js                 0.71 kB │ gzip:   0.39 kB
+dist/assets/NotFoundPage-BGjXa2V9.js             0.80 kB │ gzip:   0.43 kB
+dist/assets/stats-BRJoIVjo.js                    1.32 kB │ gzip:   0.68 kB
+dist/assets/Modal-CRJxUx4o.js                    1.59 kB │ gzip:   0.77 kB
+dist/assets/SyncBadge-DbiwhoPo.js                2.83 kB │ gzip:   1.12 kB
+dist/assets/ConverterPage-DT3KktxQ.js            6.58 kB │ gzip:   2.57 kB
+dist/assets/AuthPage-BfeDL9Q6.js                 7.34 kB │ gzip:   2.83 kB
+dist/assets/TransactionForm-DJmfxXa8.js          7.34 kB │ gzip:   2.88 kB
+dist/assets/LandingPage-DxG6K9vO.js              8.25 kB │ gzip:   2.74 kB
+dist/assets/TransactionDetailPage-DVcTgq1i.js    8.78 kB │ gzip:   2.82 kB
+dist/assets/SettingsPage-6TWRsLIU.js             9.47 kB │ gzip:   3.05 kB
+dist/assets/index-oWp4naCq.js                  267.05 kB │ gzip:  86.39 kB
+dist/assets/DashboardPage-BpBFikx0.js          416.82 kB │ gzip: 119.19 kB
+
+✓ built in 883ms

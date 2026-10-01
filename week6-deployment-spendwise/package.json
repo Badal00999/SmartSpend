@@ -1,0 +1,45 @@
+{
+  "name": "spendwise-week6",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SpendWise Week 6: production deployment preparation and operational runbooks",
+  "type": "module",
+  "author": "Badal (Badal00999)",
+  "license": "MIT",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "keywords": [
+    "fullstack",
+    "react",
+    "express",
+    "mongodb",
+    "rest-api",
+    "sse",
+    "expense-tracker",
+    "yuva-internship"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Badal00999/SmartSpend"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "node scripts/dev.mjs",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server start",
+    "test": "npm --prefix server test && npm --prefix client test -- --run",
+    "test:api": "npm --prefix server test",
+    "test:client": "npm --prefix client test -- --run",
+    "test:e2e": "npm --prefix e2e test",
+    "seed": "npm --prefix server run seed",
+    "lint": "npm --prefix client run lint",
+    "profile": "node server/scripts/profile-transactions.mjs",
+    "test:coverage": "npm --prefix server test -- --coverage && npm --prefix client test -- --coverage",
+    "evidence:sanitize": "node scripts/sanitize-evidence.mjs",
+    "deploy:build": "npm --prefix client ci --include=dev && npm --prefix client run build && npm --prefix server ci --omit=dev",
+    "deploy:start": "npm --prefix server start",
+    "test:production": "node server/scripts/production-smoke.mjs",
+    "test:production:browser": "node server/scripts/production-smoke.mjs --browser"
+  }
+}

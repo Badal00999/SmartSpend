@@ -1,0 +1,59 @@
+
+> spendwise-week5@1.0.0 setup
+> node scripts/setup.mjs
+
+
+SpendWise full-stack setup – installing: server, client, e2e
+
+
+▶ server
+
+added 262 packages, and audited 263 packages in 8s
+
+70 packages are looking for funding
+  run `npm fund` for details
+
+3 vulnerabilities (2 moderate, 1 high)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+
+▶ client
+
+added 193 packages, and audited 194 packages in 4s
+
+36 packages are looking for funding
+  run `npm fund` for details
+
+1 high severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+
+▶ e2e
+
+added 3 packages, and audited 4 packages in 566ms
+
+found 0 vulnerabilities
+
+✓ Dependencies installed.
+
+Next steps
+  1. npm run dev      → API on http://localhost:4000 and UI on http://localhost:5173
+  2. Open http://localhost:5173/login and press "Try the demo account"
+     (demo@spendwise.app / Demo1234 – seeded automatically)
+
+Optional
+  npm test            → API + client test suites
+  npm run test:e2e    → browser end-to-end tests (needs "npx playwright install chromium" once)
+  Built-client single-port mode → see README (set SERVE_CLIENT=true before npm start)
+
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 12.2.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.0
+npm notice To update run: npm install -g npm@12.2.0
+npm notice

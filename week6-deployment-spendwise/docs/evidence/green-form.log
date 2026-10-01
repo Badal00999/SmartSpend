@@ -1,0 +1,14 @@
+
+> spendwise@1.0.0 test
+> vitest run src/test/week5-form.test.jsx
+
+
+ RUN  v4.1.11 /home/user/week5-testing-optimization/client
+
+ ✓ src/test/week5-form.test.jsx (7 tests) 259ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  17:13:10
+   Duration  1.43s (transform 122ms, setup 151ms, import 139ms, tests 259ms, environment 730ms)
+
